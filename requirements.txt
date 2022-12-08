@@ -1,0 +1,34 @@
+# General modules:
+django >3.2,<3.3
+python-decouple
+Pillow
+# djangorestframework
+
+# Third party modules:
+# markdown       
+# django-filter  
+drf-yasg[validation]
+
+# Deployment modules:
+# djangorestframework-simplejwt
+# gunicorn
+
+# email
+# django-mail-templated
+
+# reformatting
+# black
+# flake8
+# autopep8 # to use by vs code auto formater on save
+# pytest
+# pytest-django
+# Faker
+
+# background proccess and cache
+# celery
+# redis
+# django-celery-beat
+# django-redis
+
+# database
+# psycopg2-binary
