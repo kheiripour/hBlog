@@ -2,19 +2,19 @@
 django >3.2,<3.3
 python-decouple
 Pillow
-# djangorestframework
+djangorestframework
 
 # Third party modules:
-# markdown       
-# django-filter  
+markdown       
+django-filter  
 drf-yasg[validation]
 
 # Deployment modules:
-# djangorestframework-simplejwt
-# gunicorn
+djangorestframework-simplejwt
+gunicorn
 
 # email
-# django-mail-templated
+django-mail-templated
 
 # reformatting
 # black
@@ -25,10 +25,10 @@ drf-yasg[validation]
 # Faker
 
 # background proccess and cache
-# celery
-# redis
-# django-celery-beat
-# django-redis
+celery
+redis
+django-celery-beat
+django-redis
 
 # database
 # psycopg2-binary

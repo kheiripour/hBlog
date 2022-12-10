@@ -1,0 +1,18 @@
+{% extends "mail_templated/base.tpl" %}
+
+{% block subject %}
+Activation email
+{% endblock %}
+
+{% block body %}
+ 
+{% endblock %}
+
+{% block html %}
+<h1>Welcome to hBlog App </h1>
+
+<p >click this link to active your user account:</p>
+
+<a href="{{ scheme }}://{{ host }}/accounts/api/v1/confirm-activation/{{ token }} ">Activation</a>
+
+{% endblock %}
