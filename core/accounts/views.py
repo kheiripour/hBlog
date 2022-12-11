@@ -16,7 +16,7 @@ class SignUpView(CreateView):
 
     def get_success_url(self):
         profile = Profile.objects.get(user=self.object)
-        success_url = reverse_lazy("accounts:profile", kwargs={'pk':profile.id})
+        success_url = reverse_lazy("accounts:profile")
         return success_url 
 
 
