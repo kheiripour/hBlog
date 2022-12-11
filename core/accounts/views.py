@@ -1,4 +1,5 @@
 from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import (
     SuccessMessageMixin,)
@@ -22,12 +23,20 @@ class SignUpView(CreateView):
 class LoginView(BaseLoginView):
     template_name = "accounts/login.html"
     fields = ["email", "password"]
-    success_url = reverse_lazy("/")
+    # success_url = reverse_lazy("/")
 
-class ProfileView(LoginRequiredMixin ,UpdateView,SuccessMessageMixin):
+class ProfileView(LoginRequiredMixin, UpdateView):
     template_name = "accounts/profile.html"
     model = Profile
-    fields = ['first_name','last_name','about','address','phone_number']
-    success_url = reverse_lazy("accounts:login")
-    success_message = "Your profile updated successfully"
+    fields = ['first_name','last_name','about','address','phone_number','image']
+    success_url = reverse_lazy("accounts:login") # will changed after blog implemented
+
+    def get_object(self):
+        return get_object_or_404(Profile.objects.all(),user=self.request.user)
+
+
+      
+
+
+    
 
