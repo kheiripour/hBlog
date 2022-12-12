@@ -74,7 +74,8 @@ class Profile(models.Model):
     address = models.TextField(blank=True)
     image = models.ImageField(blank=True,null=True, upload_to="profiles/")
     about = models.TextField(blank=True)
-    
+    is_complete = models.BooleanField(default=False)
+
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 

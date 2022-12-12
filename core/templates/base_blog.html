@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+
+    <!-- Favicon -->
+    <link href="{% static 'fav.png' %}" rel="icon">
+
+
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <!-- owl.carousel.2.0.0-beta.2.4 css -->
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %} ">
+    <!-- font-awesome v4.6.3 css -->
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <!-- magnific-popup.css -->
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <!-- slicknav.min.css -->
+    <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}">
+    <!-- style css -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- responsive css -->
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+
+    <!-- Scripts -->
+    <!-- modernizr script -->
+    <script src="{% static 'js/vendor/modernizr-2.8.3.min.js' %}"></script>
+
+
+
+    {% block extracss %}{% endblock %}
+    {% block extrajs %}{% endblock %}
+
+</head>
+
+<body>
+
+    <header class="header-area header-area3">
+        <div class="header-top bg-1">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-end">
+
+                        {% if request.user.is_authenticated %}
+                        <a href="{% url 'accounts:profile' %}" class="btn btn-warning px-4">Loged in as {{ request.user.profile|truncatechars:15 }}  </a>
+                        <a href="{% url 'accounts:logout'%}" class="btn btn-warning px-4">Log out</a>
+                        {% else %}
+                        <a href="{% url 'accounts:login' %}" class="btn btn-warning px-4">Login</a>
+                        <a href="{% url 'accounts:register' %}" class="btn btn-warning px-4">Sign Up</a>
+                        {% endif %}
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+
+
+</body>
+{% block script %}
+{% endblock %}
+
+</html>

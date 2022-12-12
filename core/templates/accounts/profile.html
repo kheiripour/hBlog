@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_account.html" %}
 {% load static %}
 {% block title %} Profile {% endblock %}
 
@@ -57,8 +57,13 @@
                             <textarea name="about" class="form-control" rows="3"
                                 placeholder="I am .....">{{ profile.about }}</textarea>
                         </div>
-                        <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Save
-                                Profile</button></div>
+                        
+                        <div class="mt-5 text-center">
+                            <a class="btn btn-danger " href="{{request.META.HTTP_REFERER}}">Back</a>
+                            <a class="btn btn-success  " href="{% url 'website:index' %}"><i class="fa fa-home"></i></a>
+                            <button class="btn btn-primary profile-button" type="submit">Save
+                                Profile</button>
+                            </div>
                     </div>
                     {% if form.errors %}
                     <div class="alert alert-error">

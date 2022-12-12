@@ -3,6 +3,7 @@ django >3.2,<3.3
 python-decouple
 Pillow
 djangorestframework
+django-summernote
 
 # Third party modules:
 markdown       

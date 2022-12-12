@@ -8,6 +8,7 @@ from .models import User, Profile
 class CustomUserAdmin(UserAdmin):
     model = User
     list_display = (
+        'id',
         "email",
         "is_superuser",
         "is_active",
@@ -16,7 +17,7 @@ class CustomUserAdmin(UserAdmin):
     )
     list_filter = ("email", "is_superuser", "is_active", "is_author")
     search_fields = ("email",)
-    ordering = ("email",)
+    ordering = ("-id",)
     fieldsets = (
         (
             "Authentication",
@@ -68,6 +69,12 @@ class CustomUserAdmin(UserAdmin):
         ),
     )
 
+class ProfileAdmin(admin.ModelAdmin):
+    model = Profile
+    list_display = ['id','user','first_name','last_name','phone_number','is_complete','created_date']
+    list_filter = ['is_complete']
+    ordering = ("-id",)
+    search_fields = ("first_name","last_name")
 
-admin.site.register(Profile)
+admin.site.register(Profile, ProfileAdmin)
 admin.site.register(User, CustomUserAdmin)

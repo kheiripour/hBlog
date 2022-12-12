@@ -13,26 +13,32 @@ from .models import Profile
 class SignUpView(CreateView):
     template_name = "accounts/register.html"
     form_class = UserRegisterForm
-
-    def get_success_url(self):
-        profile = Profile.objects.get(user=self.object)
-        success_url = reverse_lazy("accounts:profile")
-        return success_url 
-
+    success_url = reverse_lazy("accounts:login")
+    
 
 class LoginView(BaseLoginView):
     template_name = "accounts/login.html"
     fields = ["email", "password"]
-    # success_url = reverse_lazy("/")
+    
+    def get_success_url(self):
+        profile = Profile.objects.get(user=self.request.user)
+        return "/" if profile.is_complete else reverse_lazy("accounts:profile")
+     
 
 class ProfileView(LoginRequiredMixin, UpdateView):
     template_name = "accounts/profile.html"
     model = Profile
     fields = ['first_name','last_name','about','address','phone_number','image']
-    success_url = reverse_lazy("accounts:login") # will changed after blog implemented
+    success_url = "/"
 
     def get_object(self):
         return get_object_or_404(Profile.objects.all(),user=self.request.user)
+
+    def post(self, request, *args, **kwargs):
+        profile = Profile.objects.get(user=self.request.user)
+        profile.is_complete = True
+        profile.save()
+        return super().post(request, *args, **kwargs)
 
 
       

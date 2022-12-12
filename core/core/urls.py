@@ -40,6 +40,10 @@ urlpatterns = [
     path("accounts/", include("accounts.urls")),
     path("api-auth/", include("rest_framework.urls")),
 
+    path("blog/", include("blog.urls")),
+    
+    path("", include("website.urls")),
+
 
     #swagger and recoc docs:
     path(
@@ -57,6 +61,7 @@ urlpatterns = [
         schema_view.with_ui("redoc", cache_timeout=0),
         name="schema-redoc",
     ),
+    path('summernote/', include('django_summernote.urls')),
 ]
 
 if settings.DEBUG:
