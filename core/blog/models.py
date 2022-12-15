@@ -19,8 +19,8 @@ class Post(models.Model):
     counted_view = models.IntegerField(default=0)
     status = models.BooleanField(default=False) 
     category = models.ManyToManyField(Category)
-    image = models.ImageField(upload_to='lessons/',null=True,blank=True)
-    pub_date = models.DateField(null=True, blank=True)    
+    image = models.ImageField(upload_to='posts/',null=True,blank=True)
+    pub_date = models.DateField(null=True, blank=True,auto_now_add=True)    
     
     created_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)

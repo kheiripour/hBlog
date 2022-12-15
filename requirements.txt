@@ -23,7 +23,7 @@ django-mail-templated
 # autopep8 # to use by vs code auto formater on save
 # pytest
 # pytest-django
-# Faker
+Faker
 
 # background proccess and cache
 celery

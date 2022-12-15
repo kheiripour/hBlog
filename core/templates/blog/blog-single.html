@@ -12,7 +12,7 @@
                     <div class="blog-wrapper ">
                         <div class="blog-images text-center">
                             <h3>{{ post.title }}</h3>
-                            <img class="post-image" src="{{ post.image.url }}" alt="">
+                            <img class="post-image" src=" {% if post.image %} {{ post.image.url }} {% else %} {% static 'default-post.jpg' %} {% endif %}" alt="">
                         </div>
                         <div class="blog-meta">
                             <ul>

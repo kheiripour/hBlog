@@ -16,7 +16,8 @@
                 <div class="blog-wrap">
                     <div class="blog-image">
                         <a href="{% url 'blog:blog-single' pk=post.id %}">
-                            <img class="post-image-grid"  src="{{ post.image.url }}" alt=""></a>
+                            <img class="post-image-grid"  src="
+                            {% if post.image %} {{ post.image.url }} {% else %} {% static 'default-post.jpg' %} {% endif %}" alt=""></a>
                         <ul>
                             <li>{{ post.pub_date|date:"d" }}</li>
                             <li>{{ post.pub_date|date:"M" }}</li>
