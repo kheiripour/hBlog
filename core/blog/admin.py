@@ -5,7 +5,7 @@ from .models import Post, Category, Comment
 
 class PostAmin(SummernoteModelAdmin):
     summernote_fields = ('content',)
-    list_display = ('title','author','counted_view','status','created_date','update_date','id')
+    list_display = ('title','snippet','author','counted_view','status','created_date','update_date','id')
     list_filter= ('author','status')
 
 admin.site.register(Post,PostAmin)
@@ -18,7 +18,7 @@ admin.site.register(Category,CategoryAdmin)
 class CommentAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_date'
     list_filter = ('post',)
-    list_display = ('post','commenter','approved','created_date')
+    list_display = ('id','post','commenter','approved','replied_to','created_date')
 
 admin.site.register(Comment,CommentAdmin)
 

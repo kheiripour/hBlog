@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import Profile
+from datetime import datetime
 
 # Create your models here.
 
@@ -13,11 +14,13 @@ class Category(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
+    snippet = models.TextField(default="Summary description for blogs page",max_length=200)
     author = models.ForeignKey(Profile,on_delete=models.SET_NULL,null=True)
     counted_view = models.IntegerField(default=0)
     status = models.BooleanField(default=False) 
     category = models.ManyToManyField(Category)
-    image = models.ImageField(upload_to='lessons/',null=True,blank=True)     
+    image = models.ImageField(upload_to='lessons/',null=True,blank=True)
+    pub_date = models.DateField(null=True, blank=True)    
     
     created_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
@@ -35,6 +38,7 @@ class Comment(models.Model):
     replied_to = models.ForeignKey("self", on_delete=models.SET_NULL,null=True,blank=True)
     message = models.TextField()
     approved = models.BooleanField(default=False)
+    
 
     created_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)

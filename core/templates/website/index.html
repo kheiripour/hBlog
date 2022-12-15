@@ -1,11 +1,172 @@
 {% extends "base_blog.html" %}
 {% load static %}
-{% block title %} Login {% endblock %}
-{% block extracss %}
 
-{% endblock %}
-
+{% block title %} {{ title }} {% endblock %}
 {% block content %}
-<p>Hello</p>
+<!-- slider-area start -->
+<div class="slider-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="slider-active2 next-prev-style ">
+                    <div class="slider-item2 ">
+                        <img src="{% static 'img/slider/3.jpg' %}" alt="" class="slider">
+                        <div class="slider-content2">
+                            <p>Mordan Bowman</p>
+                            <span>15 December, 17</span>
+                            <h2>These graphic-design images from north korea are glorious to beholdea collection of
+                                hermit...</h2>
+                            <a href="">Read more <i class="fa fa-long-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="slider-item2">
+                        <img src="{% static 'img/slider/4.jpg' %}" alt="" class="slider">
+                        <div class="slider-content2">
+                            <p>Mordan Bowman</p>
+                            <span>15 December, 17</span>
+                            <h2>These graphic-design images from north korea are glorious to beholdea collection of
+                                hermit...</h2>
+                            <a href="">Read more <i class="fa fa-long-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- slider-area end -->
+
+<!-- .post-area start -->
+<div class="post-area pb-80 post-area3 pt-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-title text-center">
+                    <h2>Recent Post</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-12">
+                <div class="sidebar-popular-post">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-6 col-12">
+                            <div class="widget widget_categories ">
+                                <h4 class="widget-title">Category Post</h4>
+                                <ul>
+                                    <li><a href="#">Entertainment</a></li>
+                                    <li><a href="#">Technology</a></li>
+                                    <li><a href="#">Business</a></li>
+                                    <li><a href="#">Business</a></li>
+                                    <li><a href="#">Life Style</a></li>
+                                    <li><a href="#">Musuc & Band</a></li>
+                                    <li><a href="#">Travels</a></li>
+                                    <li><a href="#">Restaurent</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-6 col-12">
+                            <div class="booking-wrap2">
+                                <div class="booking-img2">
+                                    <img src="{% static 'img/booking2.jpg' %}" alt="">
+                                </div>
+                                <div class="booking-form">
+                                    <form action="#">
+                                        <h2>Get Breaking News delivered to your inbox.</h2>
+                                        <input type="text" placeholder="Name here...">
+                                        <input type="text" placeholder="Phone here...">
+                                        <input type="email" placeholder="Emaile here...">
+                                        <button>Subscribe now</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 col-12">
+                <div class="row">
+                    <div class="col-12 col-lg-12 col-md-6">
+                        <div class="post-wrap">
+                            <div class="post-img">
+                                <img src="{% static 'img/post/post2/1.jpg' %}" alt="">
+                            </div>
+                            <div class="post-content">
+                                <h3><a href="">British military courts use aginst protesters busines cultural...</a>
+                                </h3>
+                                <p>Courtney Singleton</p>
+                                <span>15 December, 17</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12 col-md-6">
+                        <div class="post-wrap">
+                            <div class="post-img">
+                                <img src="{% static 'img/post/post2/2.jpg' %}" alt="">
+                            </div>
+                            <div class="post-content">
+                                <h3><a href="">South korea’s moon jae in sworn vowing to address north...</a></h3>
+                                <p>Courtney Singleton</p>
+                                <span>15 December, 17</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12 col-md-6">
+                        <div class="post-wrap">
+                            <div class="post-img">
+                                <img src="{% static 'img/post/post2/3.jpg' %}" alt="">
+                            </div>
+                            <div class="post-content">
+                                <h3><a href="">Robots helped inspire and deep learning might become...</a></h3>
+                                <p>Courtney Singleton</p>
+                                <span>15 December, 17</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12 col-md-6">
+                        <div class="post-wrap">
+                            <div class="post-img">
+                                <img src="{% static 'img/post/post2/4.jpg' %}" alt="">
+                            </div>
+                            <div class="post-content">
+                                <h3><a href="">Man looking at his note remember to daily tasks...</a></h3>
+                                <p>Courtney Singleton</p>
+                                <span>15 December, 17</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12 col-md-6">
+                        <div class="post-wrap">
+                            <div class="post-img">
+                                <img src="{% static 'img/post/post2/5.jpg' %}" alt="">
+                            </div>
+                            <div class="post-content">
+                                <h3><a href="">British military courts use aginst protesters busines cultural...</a>
+                                </h3>
+                                <p>Courtney Singleton</p>
+                                <span>15 December, 17</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- .post-area end -->
+
+    <!-- contact-arena -->
+    <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-12">
+        <div class="booking-content text-center">
+            <h2>We are honored to have you join us write here. Let’s get started today!</h2>
+            <a href="" class="readmore-btn">Contact now</a>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- contact-arena end -->
 
 {% endblock %}
+
+

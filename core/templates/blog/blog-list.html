@@ -1,0 +1,60 @@
+{% extends "base_blog.html" %}
+{% load static %}
+{% block title %} {{title}} {% endblock %}
+
+{% block content %}
+
+
+<!-- blog-area start -->
+<div class="blog-area">
+    <div class="container">
+        <div class="row">
+
+            {% for post in posts %}
+
+            <div class="col-lg-4 mb-3 d-flex align-items-stretch">
+                <div class="blog-wrap">
+                    <div class="blog-image">
+                        <a href="{% url 'blog:blog-single' pk=post.id %}">
+                            <img class="post-image-grid"  src="{{ post.image.url }}" alt=""></a>
+                        <ul>
+                            <li>{{ post.pub_date|date:"d" }}</li>
+                            <li>{{ post.pub_date|date:"M" }}</li>
+                        </ul>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta font-weight-light">
+                            <ul>
+                                <li><a><i class="fa fa-user"></i> {{ post.author }}</a></li>
+                                <li><a><i class="fa fa-comments"></i> {{post.comments}} Comments</a></li>
+                            </ul>
+                        </div>
+                        <h3><a href="{% url 'blog:blog-single' pk=post.id %}">{{ post.title }}</a></h3>
+                        <p>{{ post.snippet }}</p>
+                    </div>
+                </div>
+            </div>
+           
+            {% endfor %}
+
+
+
+
+
+
+            <div class="col-12">
+                <div class="pagination-wrapper text-center mb-30">
+                    <ul class="page-numbers">
+                        <li><a class="prev page-numbers" href="#"><i class="fa fa-arrow-left"></i></a></li>
+                        <li><span class="page-numbers current">1</span></li>
+                        <li><a class="page-numbers" href="#">2</a></li>
+                        <li><a class="page-numbers" href="#">3</a></li>
+                        <li><a class="next page-numbers" href="#"><i class="fa fa-arrow-right"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- blog-area end -->
+{% endblock %}

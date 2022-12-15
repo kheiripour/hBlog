@@ -8,22 +8,18 @@
 {% endblock %}
 
 {% block content %}
-<div class="container rounded bg-white mt-5 mb-5">
-    
+<div class="container rounded bg-white mt-2 mb-5">
     <div class="row">
         <div class="col-md-3 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                <img class="rounded-circle mt-5" width="150px" height="150" src="
+            <div class="d-flex flex-column align-items-center text-center p-2 ">
+                <img id="portre" class="profile rounded-circle mt-5" onclick="document.getElementById('imgInp').click()"  src="
                     {% if profile.image %}
                     {{ profile.image.url }}
                     {% else %}
                     {% static 'default_profile.png' %}
                     {% endif %}
                     ">
-                    <button class="btn btn-light "  onclick="document.getElementById('getFile').click()">
-                        📁
-                        </button>
-                    <span class="font-weight-bold">{{ profile.user.email }}</span>
+                <span class="h5 font-weight-bold my-3">{{ profile.user.email }}</span>
             </div>
         </div>
         <div class="col-md-9 border-right">
@@ -33,7 +29,7 @@
                 </div>
                 <form action="{% url 'accounts:profile' %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input name="image" accept="image/*" type='file' id="getFile" style="display:none">
+                    <input name="image" accept="image/*" type='file' id="imgInp" style="display:none">
                     <div class="row mt-2">
                         <div class="col-md-4"><label class="labels">First Name</label><input name="first_name"
                                 type="text" class="form-control" placeholder="first name"
@@ -57,13 +53,13 @@
                             <textarea name="about" class="form-control" rows="3"
                                 placeholder="I am .....">{{ profile.about }}</textarea>
                         </div>
-                        
+
                         <div class="mt-5 text-center">
                             <a class="btn btn-danger " href="{{request.META.HTTP_REFERER}}">Back</a>
                             <a class="btn btn-success  " href="{% url 'website:index' %}"><i class="fa fa-home"></i></a>
                             <button class="btn btn-primary profile-button" type="submit">Save
                                 Profile</button>
-                            </div>
+                        </div>
                     </div>
                     {% if form.errors %}
                     <div class="alert alert-error">
@@ -88,4 +84,15 @@
     </div>
 
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    imgInp.onchange = evt => {
+        const [file] = imgInp.files
+        if (file) {
+            portre.src = URL.createObjectURL(file)
+        }
+    }
+</script>
 {% endblock %}
