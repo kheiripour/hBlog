@@ -1,7 +1,7 @@
 from django.db import models
 from accounts.models import Profile
-from datetime import datetime
-
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 # Create your models here.
 
 class Category(models.Model):
@@ -34,9 +34,10 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post,on_delete=models.CASCADE)
-    commenter = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
+    commenter = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField(max_length=20, blank=True)
     replied_to = models.ForeignKey("self", on_delete=models.SET_NULL,null=True,blank=True)
-    message = models.TextField()
+    message = models.TextField(blank=False)
     approved = models.BooleanField(default=False)
     
 
@@ -46,5 +47,10 @@ class Comment(models.Model):
     def __str__(self):
         return str(self.id) + "-" + str(self.commenter)
 
-    class   Meta:
+    class  Meta:
         ordering = ['-created_date']
+
+
+@receiver(pre_save, sender=Comment)
+def save_name(sender,instance,*args,**kwargs):
+    if instance.commenter: instance.name = instance.commenter.__str__()

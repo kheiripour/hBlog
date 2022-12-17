@@ -15,10 +15,15 @@ class CategoryAdmin(admin.ModelAdmin):
 
 admin.site.register(Category,CategoryAdmin)
 
+
+@admin.action(description='Approve selected comments')
+def make_approved(modeladmin, request, queryset):
+    queryset.update(approved=True)
 class CommentAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_date'
     list_filter = ('post',)
     list_display = ('id','post','commenter','approved','replied_to','created_date')
+    actions = [make_approved]
 
 admin.site.register(Comment,CommentAdmin)
 

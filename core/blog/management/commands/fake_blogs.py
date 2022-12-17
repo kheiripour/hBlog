@@ -29,9 +29,14 @@ class Command(BaseCommand):
         all_comments = 0
 
         for _ in range(number):
+            content_paras = choice(range(2,7))
+            content = ""
+            for _ in range(content_paras):
+                content = content + "<p>" + fake.paragraph(nb_sentences=choice(range(10,20))) + "</p>"
+
             post = Post.objects.create(
                 title = fake.paragraph(nb_sentences=1),
-                content = fake.paragraph(nb_sentences=15),
+                content = content,
                 snippet = fake.paragraph(nb_sentences=2),
                 author = choice(Profile.objects.all()),
                 status = True,
