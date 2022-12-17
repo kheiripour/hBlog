@@ -1,0 +1,26 @@
+{% load static %}
+{% for post in posts %}
+<div class="col-12 col-lg-12 col-md-6">
+    <div class="post-wrap">
+        <a href="{% url 'blog:blog-single' pk=post.id %}">
+        <div class="post-img">
+            <img class="recent-post-image" src="
+                {% if post.image %} {{ post.image.url }} {% else %} {% static 'default-post.jpg' %} {% endif %}"
+                alt="">
+        </div></a>
+        <div class="post-content">
+            <h3><a href="{% url 'blog:blog-single' pk=post.id %}">{{post.snippet}}</a>
+            </h3>
+            <p class="mr-3"><i class="fa fa-folder text-warning"></i>
+                {% for cat in post.category.all %}
+                <a href="{% url 'blog:blog-category' cat_id=cat.id %}">{{ cat.name }} </a> {% if not forloop.last %},{% endif %}
+                {% endfor %}
+            </p>
+            <a href="{% url 'blog:blog-author' author_id=post.author.id  %}">
+                <p>{{post.author}}</p>
+            </a>
+            <span>{{post.pub_date}}</span>
+        </div>
+    </div>
+</div>
+{% endfor %}

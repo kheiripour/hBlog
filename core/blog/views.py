@@ -13,6 +13,15 @@ class BlogList(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = "Blogs"
         posts = Post.objects.filter(status=True,pub_date__lte=date.today())
+
+        if (p := self.kwargs.get('author_id')) is not None:
+            print('author',p)
+            posts = posts.filter(author__id=p)
+
+        if (p := self.kwargs.get('cat_id')) is not None:
+            print('cat',p)
+            posts = posts.filter(category__id=p)
+
         for post in posts:
             post.comments = Comment.objects.filter(post=post,approved=True).count()
         context['posts'] = posts
@@ -29,7 +38,6 @@ class BlogDetail(CreateView):
         return url
 
     def get_context_data(self, **kwargs):
-        
         context = super().get_context_data(**kwargs)
         post = get_object_or_404(Post,id=self.kwargs['pk'])
         context['title'] = post.title
@@ -43,6 +51,12 @@ class BlogDetail(CreateView):
 
         return context
 
+    def get(self, request, *args, **kwargs):
+        post = get_object_or_404(Post,id=self.kwargs['pk'])
+        post.counted_view += 1
+        post.save()
+        return super().get(request, *args, **kwargs)
+      
     def form_valid(self, form):
         if self.request.user.is_authenticated:
             form.instance.commenter = self.request.user.profile

@@ -5,7 +5,7 @@
 {% block content %}
 
 <!-- .blog-details.html-area start -->
-<div class="blog-details-area ptb-80">
+<div class="blog-details-area ">
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -18,13 +18,23 @@
                     </div>
                     <div class="blog-meta">
                         <ul>
+                            <li><a><i class="fa fa-comments"></i> {{comments.count}} </a></li>
+                            <li><a><i class="fa fa-eye"></i> {{post.counted_view}}</a></li>
+                        </ul>
+                    </div>
+                    <div class="blog-meta">
+                        <ul>
                             <li>{{post.pub_date|date:"d F, Y "}}</li>
                             <li></li>
-                            <li><a href="#">By {{ post.author }}</a></li>
+                            <li><a href="{% url 'blog:blog-author' author_id=post.author.id  %}">By {{ post.author }}</a></li>
                         </ul>
                     </div>
                     <p>{{ post.content|safe }}</p>
-
+                    <p class="mr-3"><i class="fa fa-folder text-warning"></i>
+                        {% for cat in post.category.all %}
+                        <a href="{% url 'blog:blog-category' cat_id=cat.id %}">{{ cat.name }} </a> {% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                    </p>
 
                     <div class="comment-main">
                         <h3 class="blog-title">Comments<span> ({{ comments.count }})</span></h3>
