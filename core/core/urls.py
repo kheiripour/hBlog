@@ -62,6 +62,7 @@ urlpatterns = [
         name="schema-redoc",
     ),
     path('summernote/', include('django_summernote.urls')),
+    path('captcha/', include('captcha.urls')),
 ]
 
 if settings.DEBUG:

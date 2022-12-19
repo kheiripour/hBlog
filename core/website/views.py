@@ -1,6 +1,9 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
-from .models import Slider
+
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView,CreateView
+from captcha.helpers import captcha_image_url
+from .models import Slider,Contact
+from .forms import ContactForm
 # Create your views here.
 
 class IndexView(TemplateView):
@@ -12,5 +15,35 @@ class IndexView(TemplateView):
         context['slides'] = slides
         context['title'] = "Home"
         return context
+
+
+class ContactView(CreateView):
+    template_name = "website/conatct.html"
+    model = Contact
+    form_class = ContactForm
+    success_url = reverse_lazy('website:index')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Contact"
+        return context
+
+    def form_valid(self, form):
+        
+        if self.request.user.is_authenticated:
+            form.instance.sender = self.request.user.profile
+            form.instance.name = self.request.user.profile
+            form.instance.email = self.request.user.email
+        else:
+            form.instance.name = self.request.POST.get('name')
+            form.instance.email = self.request.POST.get('email')
+
+        return super().form_valid(form)
+
+
+
+
+
+
 
 

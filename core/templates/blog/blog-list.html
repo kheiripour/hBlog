@@ -1,12 +1,35 @@
 {% extends "base_blog.html" %}
 {% load static %}
+{% load blog_tags %}
 {% block title %} {{title}} {% endblock %}
 
 {% block content %}
 
+<!-- breadcumb-area start -->
+{% if resalt_title %}
+<div class="breadcumb-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcumb-wrap text-center">
+                    <ul>
+                        <li class=" h5 ">{{resalt_title}}</li>
+                        <li>:</li>
+                        <li class=" h5 active">{{resalt_value}}</li>
+                        <li class=" h5 active">({{count}})</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+<!-- breadcumb-area end -->
+
+
 <!-- blog-area start -->
 <div class="container">
-    <div class="row">
+    <div class="row py-2">
         {% for post in posts %}
         <div class="col-lg-4 mb-3 d-flex align-items-stretch">
             <div class="blog-wrap">
@@ -24,7 +47,8 @@
                 <div class="blog-content py-1">
                     <div class="blog-meta font-weight-light">
                         <ul>
-                            <li><a href="{% url 'blog:blog-author' author_id=post.author.id  %}"><i class="fa fa-user"></i> {{ post.author }}</a></li>
+                            <li><a href="{% url 'blog:blog-author' author_id=post.author.id  %}"><i
+                                        class="fa fa-user"></i> {{ post.author }}</a></li>
                             <li><a><i class="fa fa-comments"></i> {{post.comments}} </a></li>
                             <li><a><i class="fa fa-eye"></i> {{post.counted_view}}</a></li>
                         </ul>
@@ -32,13 +56,13 @@
 
                     <h3><a href="{% url 'blog:blog-single' pk=post.id %}">{{ post.title }}</a></h3>
                     <p>{{ post.snippet }}</p>
-                    
-                        <p><i class="fa fa-folder text-warning"></i>
+
+                    <p><i class="fa fa-folder text-warning"></i>
                         {% for cat in post.category.all %}
                         <a href="{% url 'blog:blog-category' cat_id=cat.id %}">{{ cat.name }} </a> {% if not forloop.last %},{% endif %}
                         {% endfor %}
-                        </p>
-                    
+                    </p>
+
                 </div>
             </div>
         </div>
@@ -46,18 +70,31 @@
         {% endfor %}
 
 
-
-
-
-
         <div class="col-12">
             <div class="pagination-wrapper text-center mb-30">
                 <ul class="page-numbers">
-                    <li><a class="prev page-numbers" href="#"><i class="fa fa-arrow-left"></i></a></li>
-                    <li><span class="page-numbers current">1</span></li>
-                    <li><a class="page-numbers" href="#">2</a></li>
-                    <li><a class="page-numbers" href="#">3</a></li>
-                    <li><a class="next page-numbers" href="#"><i class="fa fa-arrow-right"></i></a></li>
+
+                    {% queries request as uq %}
+
+                    <li><a class="prev page-numbers" href="?{{uq}}page=1"><i class="fa fa-angle-double-left"></i></a>
+                    </li>
+                    <li><a class="prev page-numbers"
+                            href="?{{uq}}page={% if page_obj.has_previous %}{{page_obj.previous_page_number}}{% else %}{{page_obj.number}}{% endif %}"><i
+                                class="fa fa-arrow-left"></i></a></li>
+
+                    {% for p in page_obj.paginator.page_range %}
+                        {% if page_obj.number == p %}
+                            <li><span class="page-numbers current">{{p}}</span></li>
+                        {% elif p <= page_obj.number|add:2 and p >= page_obj.number|add:-2 %}
+                            <li><a class="page-numbers" href="?{{uq}}page={{p}}">{{p}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                        <li><a class="next page-numbers"
+                                href="?{{uq}}page={% if page_obj.has_next %}{{page_obj.next_page_number}}{% else %}{{page_obj.number}}{% endif %}"><i
+                                    class="fa fa-arrow-right"></i></a></li>
+                        <li><a class="prev page-numbers" href="?{{uq}}page={{page_obj.paginator.num_pages}}"><i
+                                    class="fa fa-angle-double-right"></i></a></li>
                 </ul>
             </div>
         </div>

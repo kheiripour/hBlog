@@ -44,11 +44,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    
     'accounts',
     'blog',
     'website',
 
-    
+    'captcha',
     'django_summernote',
     'rest_framework',
     'rest_framework.authtoken',
@@ -196,3 +197,8 @@ CACHES = {
 
 # summernote settings:
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+# simple capthca configs
+
+CAPTCHA_FONT_SIZE = 34
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'

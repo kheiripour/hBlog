@@ -4,6 +4,7 @@ python-decouple
 Pillow
 djangorestframework
 django-summernote
+django-simple-captcha
 
 # Third party modules:
 markdown       

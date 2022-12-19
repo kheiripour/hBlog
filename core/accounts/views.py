@@ -1,8 +1,6 @@
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy,reverse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.messages.views import (
-    SuccessMessageMixin,)
 from django.views.generic.edit import CreateView , UpdateView
 from django.contrib.auth.views import (
     LoginView as BaseLoginView,)
@@ -22,7 +20,7 @@ class LoginView(BaseLoginView):
     
     def get_success_url(self):
         profile = Profile.objects.get(user=self.request.user)
-        return "/" if profile.is_complete else reverse_lazy("accounts:profile")
+        return "/" if profile.is_complete else reverse("accounts:profile")
      
 
 class ProfileView(LoginRequiredMixin, UpdateView):
@@ -32,7 +30,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
     success_url = "/"
 
     def get_object(self):
-        return get_object_or_404(Profile.objects.all(),user=self.request.user)
+        return get_object_or_404(Profile,user=self.request.user)
 
     def post(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=self.request.user)

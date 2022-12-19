@@ -73,17 +73,16 @@
                             <ul id="navigation">
                                 <li {% if title == "Home" %} class="active" {% endif %} ><a href="{% url 'website:index' %}">Home </a></li>
                                 <li {% if title == "Blogs" %} class="active" {% endif %} ><a href="{% url 'blog:blog-list' %}">Blog </a></li>
-                                <li {% if title == "About" %} class="active" {% endif %} ><a href="">About</a></li>
-                                <li {% if title == "Contact" %} class="active" {% endif %} ><a href="">Contact</a></li>
+                                <li {% if title == "Contact" %} class="active" {% endif %} ><a href="{% url 'website:contact' %}">Contact</a></li>
                             </ul>
                         </div>
                     </div>
 
                     <div class="col-md-8 col-lg-5 col-sm-9 col-9">
                         <div class="form-style search-form">
-                            <form action="#">
-                                <input type="text" placeholder="Search here...">
-                                <button><i class="fa fa-search"></i></button>
+                            <form action="{% url 'blog:blog-list' %}" method="get">
+                                <input type="text" name="search" placeholder="Search here...">
+                                <button type="submit"><i class="fa fa-search"></i></button>
                             </form>
                         </div>
                     </div>
