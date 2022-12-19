@@ -3,12 +3,17 @@ from django_summernote.admin import SummernoteModelAdmin
 from .models import Post, Category, Comment
 # Register your models here.
 
-class PostAmin(SummernoteModelAdmin):
+class CommentInline(admin.StackedInline):
+    model = Comment
+class PostAdmin(SummernoteModelAdmin):
     summernote_fields = ('content',)
     list_display = ('title','snippet','author','counted_view','status','created_date','update_date','id')
     list_filter= ('author','status')
+    inlines = [
+        CommentInline,
+    ]
 
-admin.site.register(Post,PostAmin)
+admin.site.register(Post,PostAdmin)
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display=('name','id')
@@ -24,6 +29,6 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ('post',)
     list_display = ('id','post','commenter','approved','replied_to','created_date')
     actions = [make_approved]
-
+    
 admin.site.register(Comment,CommentAdmin)
 

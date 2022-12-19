@@ -27,7 +27,6 @@ class BlogList(ListView):
         self.extra_context['count'] = len(posts)   
         for post in posts:
             post.comments = Comment.objects.filter(post=post,approved=True).count()
-        
         return posts
    
         
