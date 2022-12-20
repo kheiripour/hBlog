@@ -1,6 +1,6 @@
 from django.urls import reverse_lazy,reverse
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.views.generic.edit import CreateView , UpdateView
 from django.contrib.auth.views import (
     LoginView as BaseLoginView,)
@@ -22,6 +22,7 @@ class LoginView(BaseLoginView):
      
 
 class ProfileView(LoginRequiredMixin, UpdateView):
+    
     template_name = "accounts/profile.html"
     model = Profile
     fields = ['first_name','last_name','about','address','phone_number','image']
@@ -35,7 +36,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         profile.is_complete = True
         profile.save()
         return super().post(request, *args, **kwargs)
-
+        
 
       
 

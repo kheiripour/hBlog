@@ -17,7 +17,7 @@ class PostVersion(models.Model):
     number = models.PositiveSmallIntegerField()
     title = models.CharField(max_length=255)
     content = models.TextField()
-    snippet = models.TextField(default="Summary description for blogs page",max_length=200)
+    snippet = models.TextField(default="Summary description for blogs page",max_length=150)
     category = models.ManyToManyField(Category,help_text="First will be main category")
     image = models.ImageField(upload_to='posts/',null=True,blank=True)
 

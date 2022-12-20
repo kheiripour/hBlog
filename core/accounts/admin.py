@@ -13,9 +13,9 @@ class CustomUserAdmin(UserAdmin):
         "is_superuser",
         "is_active",
         "is_verified",
-        "is_author"
+        
     )
-    list_filter = ("email", "is_superuser", "is_active", "is_author")
+    list_filter = ("email", "is_superuser", "is_active" )
     search_fields = ("email",)
     ordering = ("-id",)
     fieldsets = (
@@ -33,7 +33,7 @@ class CustomUserAdmin(UserAdmin):
                     "is_active",
                     "is_superuser",
                     "is_verified",
-                    "is_author"
+                    
                 ),
             },
         ),
@@ -63,7 +63,7 @@ class CustomUserAdmin(UserAdmin):
                     "is_active",
                     "is_superuser",
                     "is_verified",
-                    "is_author",
+                    
                 ),
             },
         ),
@@ -71,8 +71,8 @@ class CustomUserAdmin(UserAdmin):
 
 class ProfileAdmin(admin.ModelAdmin):
     model = Profile
-    list_display = ['id','user','first_name','last_name','phone_number','is_complete','created_date']
-    list_filter = ['is_complete']
+    list_display = ['id','user','first_name','last_name','phone_number','is_complete',"is_author",'created_date']
+    list_filter = ['is_complete',"is_author"]
     ordering = ("-id",)
     search_fields = ("first_name","last_name")
 

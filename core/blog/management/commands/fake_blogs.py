@@ -63,7 +63,7 @@ class Command(BaseCommand):
                     post = post,
                     commenter = choice(Profile.objects.all()),
                     replied_to = replied_to,
-                    message = fake.paragraph(nb_sentences=choice(range(0,10))),
+                    message = fake.paragraph(nb_sentences=choice(range(1,10))),
                     approved = True
                 )
                 all_comments += 1

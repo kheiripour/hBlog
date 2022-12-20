@@ -3,8 +3,8 @@ from django.contrib.auth.models import (
     BaseUserManager,
     AbstractBaseUser,
     PermissionsMixin,
+    Permission
 )
-from PIL import Image
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import post_save , pre_delete
 from django.dispatch import receiver
@@ -52,7 +52,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False)
-    is_author = models.BooleanField(default=False)
+    
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -75,6 +75,7 @@ class Profile(models.Model):
     image = models.ImageField(blank=True,null=True, upload_to="profiles/")
     about = models.TextField(blank=True)
     is_complete = models.BooleanField(default=False)
+    is_author = models.BooleanField(default=False)
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -105,6 +106,23 @@ def image_delete_handler(sender, instance, *args, **kwargs):
     if instance.image and instance.image.url:
         instance.image.delete()
 
+# Grantin permission to author users, disgranting for non-authors:
+@receiver(post_save, sender=Profile)
+def save_profile(sender, instance, created, **kwargs):
+    if instance.is_author:
+        permissions = list() 
+        permissions.append(Permission.objects.get(name='Can add post'))
+        permissions.append(Permission.objects.get(name='Can change post'))
+        permissions.append(Permission.objects.get(name='Can add post version'))
+        for perm in permissions:
+            instance.user.user_permissions.add(perm)
+    else:
+        instance.user.user_permissions.clear()
+        
+    
+   
+        
+        
 
         
 
