@@ -12,6 +12,10 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         slides = Slider.objects.filter(is_active=True)
+        for slide in  slides:
+            slide.post.image = slide.post.active_version.image
+            slide.post.title = slide.post.active_version.title
+            slide.post.snippet = slide.post.active_version.snippet
         context['slides'] = slides
         context['title'] = "Home"
         return context

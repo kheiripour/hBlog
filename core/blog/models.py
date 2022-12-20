@@ -12,27 +12,44 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-
-class Post(models.Model):
+class PostVersion(models.Model):
+    post = models.ForeignKey('post',on_delete=models.CASCADE)
+    number = models.PositiveSmallIntegerField()
     title = models.CharField(max_length=255)
     content = models.TextField()
     snippet = models.TextField(default="Summary description for blogs page",max_length=200)
+    category = models.ManyToManyField(Category,help_text="First will be main category")
+    image = models.ImageField(upload_to='posts/',null=True,blank=True)
+
+    author_note = models.TextField(blank=True)
+    admin_note = models.TextField(blank=True)
+
+    created_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.number) + "-" + self.title
+
+
+class Post(models.Model):
     author = models.ForeignKey(Profile,on_delete=models.SET_NULL,null=True)
     counted_view = models.IntegerField(default=0)
     status = models.BooleanField(default=False) 
-    category = models.ManyToManyField(Category,help_text="First will be main category")
-    image = models.ImageField(upload_to='posts/',null=True,blank=True)
+
     pub_date = models.DateField(null=True, blank=True,auto_now_add=True)    
     
+    active_version = models.ForeignKey(PostVersion,on_delete=models.SET_NULL,blank=True,null=True,related_name='+')
+
     created_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return str(self.id) + "-" + self.title
+        return str(self.id) + "-" + str(self.author)
 
 
     class   Meta:
-        ordering = ['-created_date','title']
+        ordering = ['-created_date']
+
 
 
 class Comment(models.Model):
@@ -42,6 +59,9 @@ class Comment(models.Model):
     replied_to = models.ForeignKey("self", on_delete=models.SET_NULL,null=True,blank=True)
     message = models.TextField(blank=False)
     approved = models.BooleanField(default=False)
+
+    created_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     
 
     created_date = models.DateTimeField(auto_now_add=True)

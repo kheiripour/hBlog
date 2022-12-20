@@ -6,7 +6,7 @@ from os.path import isfile, join
 
 from core import settings
 from accounts.models import Profile
-from ...models import Post ,Category,Comment
+from ...models import Post,PostVersion ,Category,Comment
 
 class Command(BaseCommand):
 
@@ -17,12 +17,6 @@ class Command(BaseCommand):
 
         number = options['number']
         fake = Faker()
-
-        # posts = Post.objects.all()
-        # images =[]
-        # for p in posts:
-        #     images.append(p.image)
-        # print(images)
 
         media_path = join(settings.MEDIA_ROOT, "posts") 
         myfiles = [f for f in listdir(media_path) if isfile(join(media_path, f))]
@@ -35,17 +29,28 @@ class Command(BaseCommand):
                 content = content + "<p>" + fake.paragraph(nb_sentences=choice(range(10,20))) + "</p>"
 
             post = Post.objects.create(
+            
+                author = choice(Profile.objects.all()),
+                status = True,
+              
+                )
+            post_version = PostVersion.objects.create(
+                post = post,
+                number = 1,
+
                 title = fake.paragraph(nb_sentences=1),
                 content = content,
                 snippet = fake.paragraph(nb_sentences=2),
-                author = choice(Profile.objects.all()),
-                status = True,
                 image = join('posts',choice(myfiles))
-                )
-        
+            )
+
+
             cats = choice([1,2,3])
             for _ in range (cats):    
-                post.category.add(choice((Category.objects.all())))
+                post_version.category.add(choice((Category.objects.all())))
+
+            post.active_version = post_version
+            post.save()
             
             comments = choice(range(0,10))
             for _ in range(comments):

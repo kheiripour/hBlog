@@ -7,13 +7,11 @@ from django.contrib.auth.views import (
 from .forms import UserRegisterForm
 from .models import Profile
 
-
 class SignUpView(CreateView):
     template_name = "accounts/register.html"
     form_class = UserRegisterForm
     success_url = reverse_lazy("accounts:login")
     
-
 class LoginView(BaseLoginView):
     template_name = "accounts/login.html"
     fields = ["email", "password"]

@@ -18,14 +18,17 @@ class BlogList(ListView):
             posts = posts.filter(author__id=p)
  
         elif (p := self.kwargs.get('cat_id')) is not None:
-            posts = posts.filter(category__id=p)
-
+            posts = posts.filter(active_version__category__id=p)
 
         elif (p := self.request.GET.get('search')) is not None:
-            posts = posts.filter(content__contains=p)
+            posts = posts.filter(active_version__content__contains=p)
 
         self.extra_context['count'] = len(posts)   
         for post in posts:
+            post.title = post.active_version.title
+            post.snippet = post.active_version.snippet
+            post.category = post.active_version.category
+            post.image = post.active_version.image
             post.comments = Comment.objects.filter(post=post,approved=True).count()
         return posts
    
@@ -58,12 +61,17 @@ class BlogDetail(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         post = get_object_or_404(Post,id=self.kwargs['pk'])
-        context['title'] = post.title
+        context['title'] = post.active_version.title
         comments = Comment.objects.filter(post=post,approved=True)
         for comment in comments:
             if not comment.replied_to:
                 comment.replies = comments.filter(replied_to=comment)
- 
+        post.title = post.active_version.title
+        post.content = post.active_version.content
+        post.snippet = post.active_version.snippet
+        post.category = post.active_version.category
+        post.image = post.active_version.image
+        
         context['post'] = post
         context['comments'] = comments
 
