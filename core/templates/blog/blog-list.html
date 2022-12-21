@@ -30,18 +30,20 @@
         <div class="col-lg-4 mb-3 d-flex align-items-stretch">
             <div class="blog-wrap align-items-stretch">
                 {% include 'blog/blog-card.html' %}
-                {% if title == "MyPost" %}
-                
-                    <div class="blog-operations text-center">
-                        <b class="float-start">Status: {%if post.status %} <i class="fa-solid fa-badge-check fa-lg"></i> {% else %} <i class="fa-solid fa-octagon-xmark"></i>{% endif%} </b>
-                        {% if post.pend %} <b class="text-danger text-center"> Has pending version!</b> {% endif %}
-                        <button class="btn btn-success float-end"><i class="fa-solid fa-pen-to-square"></i></button>
+                {% if title == "MyPosts" %}
 
-                    </div>
-                
+                <div class="blog-operations text-center">
+                    <b class="float-start">Status: {%if post.status %} <i class="fa-solid fa-badge-check fa-lg"></i> {%else%} <i class="fa-solid fa-octagon-xmark"></i>{% endif%}V:{{post.active_version.number}} </b>
+                    {% if post.pend %} <b class="text-danger text-center">
+                        {%if post.admin_checked%}
+                        V:{{ post.lastversion.number }} not approved!
+                        {%else%}
+                        V:{{ post.lastversion.number }} is waiting for admin check. {% endif %}</b> {% endif %}
+                    <a href="{% url 'blog:blog-edit' pk=post.id %}" class="btn btn-success float-end"><i
+                            class="fa-solid fa-pen-to-square"></i></a>
+                </div>
                 {% endif %}
             </div>
-
         </div>
         {% endfor %}
         <div class="col-12">

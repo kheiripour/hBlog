@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixi
 from datetime import date
 from django.urls import reverse,reverse_lazy
 from .models import Post,PostVersion,Comment,Category
-from .forms import PostForm
+from .forms import PostVersionForm
 from accounts.models import Profile
 class BlogList(ListView):
     template_name = "blog/blog-list.html"
@@ -62,7 +62,7 @@ class BlogDetail(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        post = get_object_or_404(Post,id=self.kwargs['pk'])
+        post = get_object_or_404(Post,id=self.kwargs['pk'],status=True)
         context['title'] = post.active_version.title
         comments = Comment.objects.filter(post=post,approved=True)
         for comment in comments:
@@ -105,7 +105,7 @@ class BlogAuthorList(LoginRequiredMixin,PermissionRequiredMixin,ListView):
     context_object_name = 'posts'
     model = Post
     paginate_by = 9
-    extra_context = {'title':'MyPost','resalt_title':'Your Posts'}
+    extra_context = {'title':'MyPosts','resalt_title':'Your Posts'}
 
     def get_queryset(self):
         posts = Post.objects.filter(author=self.request.user.profile)
@@ -119,36 +119,60 @@ class BlogAuthorList(LoginRequiredMixin,PermissionRequiredMixin,ListView):
             post.comments = Comment.objects.filter(post=post,approved=True).count()
             post.lastversion = PostVersion.objects.filter(post=post).order_by('-number').first()
             post.pend = True if post.active_version != post.lastversion else False    
-            
+            post.admin_checked = True if post.lastversion.admin_note else False
         return posts
         
-class BlogAuthorCreate(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
-    permission_required = ('blog.add_postversion', 'blog.add_post')
-    model = Post
-    extra_context = {'title':'New Post'}
-    template_name = "blog/blog-author-create.html"
-    form_class = PostForm
+class BlogAuthor(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
+    permission_required = ('blog.add_postversion', 'blog.change_post', 'blog.add_post')
+    model = PostVersion
+    template_name = "blog/blog-author.html"
+    form_class = PostVersionForm
     success_url = reverse_lazy('blog:blog-myposts')
 
     def form_valid(self, form):
-        post = form.save()
-        post_version = PostVersion.objects.create(
-            post = post,
-            number = 1,
-            title = self.request.POST.get('title'),
-            content = self.request.POST.get('content'),
-            snippet = self.request.POST.get('snippet'),
-            image = self.request.FILES.get('image'),
-            author_note = self.request.POST.get('author_note')
-        )
-        for cat in self.request.POST.getlist('categories'): post_version.category.add(cat)
-            
-        post.active_version = post_version
+        post_version = form.save()
+
+        if p:=self.kwargs.get('pk'):
+            post = get_object_or_404(Post,id=p)
+            pre_post_version = PostVersion.objects.filter(post=post).order_by('-number').first()
+            post_version.number = pre_post_version.number + 1
+            post_version.image = pre_post_version.image
+        else:
+            post = Post.objects.create(author = self.request.user.profile,active_version = post_version)   
+            post_version.number = 1
+
+        if img:=self.request.FILES.get('image'):
+            post_version.image = img
+
+        post_version.post = post
 
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        if p:=self.kwargs.get('pk'):
+            
+            post = get_object_or_404(Post, id=p, author=self.request.user.profile)
+            post_version = PostVersion.objects.filter(post=post).order_by('-number').first()
+            title = post_version.title
+            snippet = post_version.snippet
+            content = post_version.content
+            category = post_version.category.all()
+            author_note = post_version.author_note
+            post.image = post_version.image
+            form_input = {'title':title,'snippet':snippet,'content':content,'category':category,'author_note':author_note}
+            form = PostVersionForm(form_input)
+            context['title'] = 'Edit Post V:%i-->V:%i'%(post_version.number,post_version.number + 1)
+            context['form'] = form
+            context['admin_note'] = post_version.admin_note
+            context['post'] = post
+            
+        else:
+            
+            context['title'] = 'Create New Post'
+        
+        return context
 
-    def has_permission(self):
-    
-        return super().has_permission()
+
 

@@ -13,8 +13,8 @@ class Category(models.Model):
         return self.name
 
 class PostVersion(models.Model):
-    post = models.ForeignKey('post',on_delete=models.CASCADE)
-    number = models.PositiveSmallIntegerField()
+    post = models.ForeignKey('post',on_delete=models.CASCADE,blank=True,null=True)
+    number = models.PositiveSmallIntegerField(blank=True,null=True)
     title = models.CharField(max_length=255)
     content = models.TextField()
     snippet = models.TextField(default="Summary description for blogs page",max_length=150)
@@ -45,7 +45,6 @@ class Post(models.Model):
     
     def __str__(self):
         return str(self.id) + "-" + str(self.author)
-
 
     class   Meta:
         ordering = ['-created_date']
