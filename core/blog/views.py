@@ -1,8 +1,10 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView,CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from datetime import date
-from django.urls import reverse
-from .models import Post,Comment,Category
+from django.urls import reverse,reverse_lazy
+from .models import Post,PostVersion,Comment,Category
+from .forms import PostForm
 from accounts.models import Profile
 class BlogList(ListView):
     template_name = "blog/blog-list.html"
@@ -96,3 +98,57 @@ class BlogDetail(CreateView):
             form.instance.replied_to = Comment.objects.get(id=rep)
 
         return super().form_valid(form)
+
+class BlogAuthorList(LoginRequiredMixin,PermissionRequiredMixin,ListView):
+    permission_required = ('blog.add_postversion', 'blog.change_post', 'blog.add_post')
+    template_name = "blog/blog-list.html"
+    context_object_name = 'posts'
+    model = Post
+    paginate_by = 9
+    extra_context = {'title':'MyPost','resalt_title':'Your Posts'}
+
+    def get_queryset(self):
+        posts = Post.objects.filter(author=self.request.user.profile)
+
+        self.extra_context['count'] = len(posts)   
+        for post in posts:
+            post.title = post.active_version.title
+            post.snippet = post.active_version.snippet
+            post.category = post.active_version.category
+            post.image = post.active_version.image
+            post.comments = Comment.objects.filter(post=post,approved=True).count()
+            post.lastversion = PostVersion.objects.filter(post=post).order_by('-number').first()
+            post.pend = True if post.active_version != post.lastversion else False    
+            
+        return posts
+        
+class BlogAuthorCreate(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
+    permission_required = ('blog.add_postversion', 'blog.add_post')
+    model = Post
+    extra_context = {'title':'New Post'}
+    template_name = "blog/blog-author-create.html"
+    form_class = PostForm
+    success_url = reverse_lazy('blog:blog-myposts')
+
+    def form_valid(self, form):
+        post = form.save()
+        post_version = PostVersion.objects.create(
+            post = post,
+            number = 1,
+            title = self.request.POST.get('title'),
+            content = self.request.POST.get('content'),
+            snippet = self.request.POST.get('snippet'),
+            image = self.request.FILES.get('image'),
+            author_note = self.request.POST.get('author_note')
+        )
+        for cat in self.request.POST.getlist('categories'): post_version.category.add(cat)
+            
+        post.active_version = post_version
+
+        return super().form_valid(form)
+
+
+    def has_permission(self):
+    
+        return super().has_permission()
+

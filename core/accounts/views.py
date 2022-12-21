@@ -1,6 +1,6 @@
 from django.urls import reverse_lazy,reverse
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView , UpdateView
 from django.contrib.auth.views import (
     LoginView as BaseLoginView,)

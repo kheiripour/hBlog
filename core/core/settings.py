@@ -51,6 +51,8 @@ INSTALLED_APPS = [
 
     'captcha',
     'django_summernote',
+    'crispy_forms',
+    'crispy_bootstrap5',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
@@ -197,8 +199,20 @@ CACHES = {
 
 # summernote settings:
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+SUMMERNOTE_THEME = 'bs5'
+SUMMERNOTE_CONFIG = {
+    'summernote': {
+        
+        'width': '100%',
+        }
+}
+
 
 # simple capthca configs
-
 CAPTCHA_FONT_SIZE = 34
 CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
+
+# crispy configs:
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"

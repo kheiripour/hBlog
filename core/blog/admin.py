@@ -12,7 +12,7 @@ class PostVersionInline(admin.TabularInline):
 
 class PostAdmin(admin.ModelAdmin):
     
-    list_display = ('active_version','author','counted_view','status','created_date','update_date','id')
+    list_display = ('active_version','id','author','status','created_date','update_date')
     list_filter= ('author','status')
     inlines = [
         PostVersionInline,

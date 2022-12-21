@@ -28,9 +28,20 @@
     <div class="row py-2">
         {% for post in posts %}
         <div class="col-lg-4 mb-3 d-flex align-items-stretch">
-            <div class="blog-wrap">
+            <div class="blog-wrap align-items-stretch">
                 {% include 'blog/blog-card.html' %}
+                {% if title == "MyPost" %}
+                
+                    <div class="blog-operations text-center">
+                        <b class="float-start">Status: {%if post.status %} <i class="fa-solid fa-badge-check fa-lg"></i> {% else %} <i class="fa-solid fa-octagon-xmark"></i>{% endif%} </b>
+                        {% if post.pend %} <b class="text-danger text-center"> Has pending version!</b> {% endif %}
+                        <button class="btn btn-success float-end"><i class="fa-solid fa-pen-to-square"></i></button>
+
+                    </div>
+                
+                {% endif %}
             </div>
+
         </div>
         {% endfor %}
         <div class="col-12">

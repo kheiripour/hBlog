@@ -5,6 +5,7 @@ Pillow
 djangorestframework
 django-summernote
 django-simple-captcha
+crispy-bootstrap5
 
 # Third party modules:
 markdown       

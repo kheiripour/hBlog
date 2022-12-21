@@ -33,8 +33,8 @@ class PostVersion(models.Model):
 
 class Post(models.Model):
     author = models.ForeignKey(Profile,on_delete=models.SET_NULL,null=True)
-    counted_view = models.IntegerField(default=0)
-    status = models.BooleanField(default=False) 
+    counted_view = models.IntegerField(default=0,blank=True,null=True)
+    status = models.BooleanField(default=False,blank=True) 
 
     pub_date = models.DateField(null=True, blank=True,auto_now_add=True)    
     

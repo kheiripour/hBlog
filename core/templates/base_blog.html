@@ -54,6 +54,10 @@
                     </div>
                     <div class="col-6 text-end">
                         {% if request.user.is_authenticated %}
+                        {% if request.user.profile.is_author %}
+                        <a href="{% url 'blog:blog-create' %}" class="btn btn-sm  btn-success px-4 m-1"> Create New Post </a>
+                        <a href="{% url 'blog:blog-myposts' %}" class="btn btn-sm  btn-warning px-4 m-1"> My Posts </a>
+                        {% endif %}
                         <a href="{% url 'accounts:profile' %}" class="btn btn-sm  btn-warning px-4 m-1"> Loged in as {{request.user.profile|truncatechars:15 }} </a>
                         <a href="{% url 'accounts:logout' %}" class="btn btn-sm btn-warning px-4 m-1">Log out</a>
                         {% else %}
