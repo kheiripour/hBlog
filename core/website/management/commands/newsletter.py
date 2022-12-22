@@ -11,14 +11,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         posts = Post.objects.filter(status=True,pub_date__gte=date.today())
-        http = 'http://'
-        domain = Site.objects.get_current().domain
-        users = list(Newsletter.objects.all())
-        for post in posts:
-            post.full_url = http + domain + post.get_absolute_url()
-            post.title = post.active_version.title
-
         if posts:
+            http = 'http://'
+            domain = Site.objects.get_current().domain
+            users = list(Newsletter.objects.all())
+            for post in posts:
+                post.full_url = http + domain + post.get_absolute_url()
+                post.title = post.active_version.title
             email_obj = EmailMessage(
             "email/newsletter.html",
             {
@@ -30,7 +29,8 @@ class Command(BaseCommand):
             EmailThread(email_obj).start()
             
             self.stdout.write(self.style.SUCCESS('Successfully %i posts emailed to %i users.... :)'%(len(posts),len(users)) ))
-                
+        else:
+            self.stdout.write(self.style.ERROR('There is no new posts to mail !' ))       
             
             
          

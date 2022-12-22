@@ -1,8 +1,9 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView,CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
-from datetime import date
+from datetime import datetime
 from django.urls import reverse,reverse_lazy
+from django.contrib import messages
 from .models import Post,PostVersion,Comment,Category
 from .forms import PostVersionForm
 from accounts.models import Profile
@@ -14,7 +15,7 @@ class BlogList(ListView):
     extra_context = {}
 
     def get_queryset(self):
-        posts = Post.objects.filter(status=True,pub_date__lte=date.today())
+        posts = Post.objects.filter(status=True,pub_date__lte=datetime.now())
 
         if (p := self.kwargs.get('author_id')) is not None:
             posts = posts.filter(author__id=p)
@@ -86,6 +87,8 @@ class BlogDetail(CreateView):
         return super().get(request, *args, **kwargs)
       
     def form_valid(self, form):
+        messages.add_message(self.request, messages.SUCCESS,
+                                 'Your Comment Submitted! Thank you')
         if self.request.user.is_authenticated:
             form.instance.commenter = self.request.user.profile
         else:
@@ -137,7 +140,11 @@ class BlogAuthor(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
             pre_post_version = PostVersion.objects.filter(post=post).order_by('-number').first()
             post_version.number = pre_post_version.number + 1
             post_version.image = pre_post_version.image
+            messages.add_message(self.request, messages.SUCCESS,
+                                 'Your Change request sent successfully. Please wait for admin check, Thank You.')
         else:
+            messages.add_message(self.request, messages.SUCCESS,
+                                 'Your new post created successfully. Please wait for admin check, Thank You.')
             post = Post.objects.create(author = self.request.user.profile,active_version = post_version)   
             post_version.number = 1
 
@@ -173,7 +180,9 @@ class BlogAuthor(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
             context['form'] = form
             context['admin_note'] = post_version.admin_note
             context['post'] = post
+            
         else:
+            
             context['title'] = 'Create New Post'
         
         return context

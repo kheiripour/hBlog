@@ -46,9 +46,11 @@
             </div>
         </div>
         {% endfor %}
+        {% if page_obj.paginator.num_pages > 1 %}
         <div class="col-12">
             {% include 'blog/blog-pagination.html' %}
         </div>
+        {% endif %}
     </div>
 </div>
 <!-- blog-area end -->

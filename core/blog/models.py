@@ -1,6 +1,7 @@
 from django.db import models
+from datetime import datetime
+from django.utils.timezone import now
 from django.urls import reverse
-from django.core.exceptions import ValidationError
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from accounts.models import Profile
@@ -36,7 +37,7 @@ class Post(models.Model):
     counted_view = models.IntegerField(default=0,blank=True,null=True)
     status = models.BooleanField(default=False,blank=True) 
 
-    pub_date = models.DateField(null=True, blank=True,default='django.utils.timezone.now')    
+    pub_date = models.DateTimeField(null=True, blank=True,default=now)    
     
     active_version = models.ForeignKey(PostVersion,on_delete=models.SET_NULL,blank=True,null=True,related_name='+')
 

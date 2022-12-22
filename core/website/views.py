@@ -4,6 +4,8 @@ from django.views.generic import TemplateView,CreateView
 from captcha.helpers import captcha_image_url
 from .models import Slider,Contact,Newsletter
 from .forms import ContactForm
+from datetime import datetime
+from django.contrib import messages
 # Create your views here.
 
 class IndexView(CreateView):
@@ -13,7 +15,7 @@ class IndexView(CreateView):
     success_url = reverse_lazy('website:index')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        slides = Slider.objects.filter(is_active=True)
+        slides = Slider.objects.filter(is_active=True,post__status=True,post__pub_date__lte=datetime.now())
         for slide in  slides:
             slide.post.image = slide.post.active_version.image
             slide.post.title = slide.post.active_version.title
@@ -21,6 +23,16 @@ class IndexView(CreateView):
         context['slides'] = slides
         context['title'] = "Home"
         return context
+    
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.SUCCESS,
+                                 'Your email for newsletter recieved successfully, Thank You.')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.add_message(self.request, messages.ERROR,
+                            'Your email has problem for newsletter, please check.')
+        return super().form_invalid(form)
 
 
 class ContactView(CreateView):
