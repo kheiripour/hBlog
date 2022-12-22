@@ -1,8 +1,8 @@
 from django.db import models
+from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-
 from accounts.models import Profile
 # Create your models here.
 
@@ -36,7 +36,7 @@ class Post(models.Model):
     counted_view = models.IntegerField(default=0,blank=True,null=True)
     status = models.BooleanField(default=False,blank=True) 
 
-    pub_date = models.DateField(null=True, blank=True,auto_now_add=True)    
+    pub_date = models.DateField(null=True, blank=True,default='django.utils.timezone.now')    
     
     active_version = models.ForeignKey(PostVersion,on_delete=models.SET_NULL,blank=True,null=True,related_name='+')
 
@@ -46,6 +46,8 @@ class Post(models.Model):
     def __str__(self):
         return str(self.id) + "-" + str(self.author)
 
+    def get_absolute_url(self):
+        return reverse('blog:blog-single',kwargs={'pk':self.id})
     class   Meta:
         ordering = ['-created_date']
 

@@ -3,22 +3,7 @@
 {% load maintag %}
 {% block title %} {{ title }} {% endblock %}
 {% block content %}
-{% if form.errors %}
-    <div class="alert alert-error">
-        <h6>Please fix the following errors</h6>
-        {% for field in form %}
-        {% if field.errors %}
-        {% for error in field.errors %}
-        <p class="alert alert-danger">{{ field.name|capfirst }}: {{ error }}</p>
-        {% endfor %}
-        {% endif %}
-        {% endfor %}
-        {% if form.non_field_errors %}
-        {% for error in form.non_field_errors %}
-        <p class="alert alert-danger">{{error}}</p>
-        {% endfor %}
-        {% endif %}
-    {% endif %}
+
 
 
 <!-- slider-area start -->
