@@ -1,6 +1,7 @@
 from django.db import models
 from blog.models import Post
 from accounts.models import Profile
+from blog.models import Category
 # Create your models here.
 
 class Slider(models.Model):
@@ -20,3 +21,11 @@ class Contact(models.Model):
     is_done = models.BooleanField(default=False)
     created_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
+
+class Newsletter(models.Model):
+    email = models.EmailField(unique=True)
+    category = models.ManyToManyField(Category, blank=True)
+    
+    def __str__(self):
+        return self.email
+

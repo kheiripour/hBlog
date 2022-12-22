@@ -2,13 +2,15 @@
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView,CreateView
 from captcha.helpers import captcha_image_url
-from .models import Slider,Contact
+from .models import Slider,Contact,Newsletter
 from .forms import ContactForm
 # Create your views here.
 
-class IndexView(TemplateView):
+class IndexView(CreateView):
     template_name = "website/index.html"
-
+    model = Newsletter
+    fields = ['email']
+    success_url = reverse_lazy('website:index')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         slides = Slider.objects.filter(is_active=True)

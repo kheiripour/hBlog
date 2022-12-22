@@ -151,9 +151,8 @@ class BlogAuthor(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        if p:=self.kwargs.get('pk'):
-            
-            post = get_object_or_404(Post, id=p, author=self.request.user.profile)
+        if pk:=self.kwargs.get('pk'): 
+            post = get_object_or_404(Post, id=pk, author=self.request.user.profile)
             post_version = PostVersion.objects.filter(post=post).order_by('-number').first()
             title = post_version.title
             snippet = post_version.snippet
@@ -161,15 +160,20 @@ class BlogAuthor(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
             category = post_version.category.all()
             author_note = post_version.author_note
             post.image = post_version.image
-            form_input = {'title':title,'snippet':snippet,'content':content,'category':category,'author_note':author_note}
-            form = PostVersionForm(form_input)
+            form = PostVersionForm(
+                {
+                'title':title,
+                'snippet':snippet,
+                'content':content,
+                'category':category,
+                'author_note':author_note
+                }
+            )
             context['title'] = 'Edit Post V:%i-->V:%i'%(post_version.number,post_version.number + 1)
             context['form'] = form
             context['admin_note'] = post_version.admin_note
             context['post'] = post
-            
         else:
-            
             context['title'] = 'Create New Post'
         
         return context

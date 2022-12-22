@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Slider,Contact
+from .models import Slider,Contact,Newsletter
 # Register your models here.
 
 class SliderAdmin(admin.ModelAdmin):
@@ -12,4 +12,7 @@ class ContactAdmin(admin.ModelAdmin):
 
 admin.site.register(Contact,ContactAdmin)
 
+class NewsletterAdmin(admin.ModelAdmin):
+    list_display=('email',)
 
+admin.site.register(Newsletter,NewsletterAdmin)
