@@ -152,6 +152,7 @@ class BlogAuthor(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
             post_version.image = img
 
         post_version.post = post
+        post_version.author_note = self.request.POST.get('author_note')
 
         return super().form_valid(form)
 
@@ -176,7 +177,8 @@ class BlogAuthor(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
                 'author_note':author_note
                 }
             )
-            context['title'] = 'Edit Post V:%i-->V:%i'%(post_version.number,post_version.number + 1)
+            context['title'] = 'Edit Post V:%i-->V:%i'%(post_version. number,post_version.number + 1)
+            context['pre_author_note'] =  post_version.author_note
             context['form'] = form
             context['admin_note'] = post_version.admin_note
             context['post'] = post

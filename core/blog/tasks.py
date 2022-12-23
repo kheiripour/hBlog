@@ -8,7 +8,7 @@ from blog.models import Post
 
 @shared_task
 def send_new_posts():
-    posts = Post.objects.filter(status=True,pub_date=date.today())
+    posts = Post.objects.filter(status=True,pub_date__date=date.today())
     if posts:
         http = 'http://'
         domain = Site.objects.get_current().domain

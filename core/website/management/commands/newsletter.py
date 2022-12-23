@@ -10,7 +10,7 @@ from blog.models import Post, PostVersion, Category
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        posts = Post.objects.filter(status=True,pub_date__gte=date.today())
+        posts = Post.objects.filter(status=True,pub_date__date=date.today())
         if posts:
             http = 'http://'
             domain = Site.objects.get_current().domain

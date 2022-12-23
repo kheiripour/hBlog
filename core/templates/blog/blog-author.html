@@ -13,6 +13,12 @@
             <textarea class="form-control" disabled>{{admin_note}}</textarea>
         </div>
         {% endif %}
+        {% if pre_author_note %}
+        <div class="form-group mb-2">
+            <p >Previous Author Note:</p>
+            <textarea class="form-control"  disabled>{{pre_author_note}} </textarea>
+        </div>
+        {% endif %}
         <div class="blog-images text-center ">
             <img class="post-image clickable" onclick="document.getElementById('imgInp').click()"
                 src="{% if post.image %} {{ post.image.url }} {% else %} {% static 'default-post.jpg' %} {% endif %} "
@@ -50,9 +56,9 @@
             </div>
 
             <hr class="bold">
-
-            <div class="form-group">
-                {{form.author_note|as_crispy_field}}
+            <div class="form-group mb-2">
+                <p >*Author Note:</p>
+                <textarea class="form-control" name="author_note" required>{{author_note}}</textarea>
             </div>
 
             <div class="form-group text-center">
