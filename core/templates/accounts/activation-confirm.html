@@ -1,0 +1,15 @@
+{% extends "base_account.html" %}
+{% load static %}
+{% block title %} Login {% endblock %}
+{% block extracss %}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="col-12 text-center my-5">
+
+<p>{{confirm_message}}  <b> {% if status %}<a href="{% url 'accounts:login' %}">Login</a></b> {% endif %} </p>
+</div>
+
+{% endblock %}

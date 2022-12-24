@@ -15,7 +15,7 @@ from jwt import ExpiredSignatureError, InvalidSignatureError
 from core.settings import SECRET_KEY
 from django.shortcuts import get_object_or_404
 from mail_templated import EmailMessage
-from ..utils import EmailThread
+from website.utils import EmailThread
 
 
 class RegistrationApiView(generics.GenericAPIView):
@@ -36,6 +36,7 @@ class RegistrationApiView(generics.GenericAPIView):
                 "token": token,
                 "scheme": scheme,
                 "host": host,
+                "app_url": '/accounts/api/v1/confirm-activation/',
             },
             "admin@admin.com",
             to=[email],
@@ -88,6 +89,7 @@ class ConfirmActivationResend(generics.GenericAPIView):
                 "token": token,
                 "scheme": scheme,
                 "host": host,
+                "app_url": '/accounts/api/v1/confirm-activation/',
             },
             "admin@admin.com",
             to=[user.email],
@@ -181,6 +183,7 @@ class ResetPasswordView(generics.GenericAPIView):
                 "token": token,
                 "scheme": scheme,
                 "host": host,
+                "app_url": '/accounts/api/v1/reset_password_confirm/',
             },
             "admin@admin.com",
             to=[user.email],

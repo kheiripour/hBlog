@@ -1,0 +1,16 @@
+{% extends "base_account.html" %}
+{% load static %}
+{% block title %} Email {% endblock %}
+{% block extracss %}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="col-12 text-center my-5">
+    <p class="h5">A link has been sent to your email {{email}}</p>
+
+<p>Wanna login?<b> <a href="{% url 'accounts:login' %}">Login</a></b> </p>
+</div>
+
+{% endblock %}

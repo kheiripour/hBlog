@@ -9,10 +9,11 @@ Activation email
 {% endblock %}
 
 {% block html %}
+
 <h1>Welcome to hBlog App </h1>
 
 <p >click this link to active your user account:</p>
 
-<a href="{{ scheme }}://{{ host }}/accounts/api/v1/confirm-activation/{{ token }} ">Activation</a>
+<a href="{{ scheme }}://{{ host }}{{app_url}}{{ token }} ">Activation</a>
 
 {% endblock %}

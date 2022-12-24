@@ -6,17 +6,19 @@
             <img class="post-image-grid" src="
                     {% if post.image %} {{ post.image.url }} {% else %} {% static 'default-post.jpg' %} {% endif %}"
                 alt=""></a>
+        {% if post.status %}
         <ul>
             <li>{{ post.pub_date|date:"d" }}</li>
             <li>{{ post.pub_date|date:"M" }}, {{ post.pub_date|date:"y" }}</li>
-            
-        </ul>
 
+        </ul>
+        {% endif %}
     </div>
     <div class="blog-content py-1">
         <div class="blog-meta font-weight-light">
             <ul>
-                <li><a href="{% url 'blog:blog-author' author_id=post.author.id  %}"><i class="fa fa-user"></i> {{post.author }}</a></li>
+                <li><a href="{% url 'blog:blog-author' author_id=post.author.id  %}"><i class="fa fa-user"></i>
+                        {{post.author }}</a></li>
                 <li><a><i class="fa fa-comments"></i> {{post.comments}} </a></li>
                 <li><a><i class="fa fa-eye"></i> {{post.counted_view}}</a></li>
             </ul>
@@ -27,7 +29,7 @@
 
         <p><i class="fa fa-folder text-warning"></i>
             {% for cat in post.category.all %}
-            <a href="{% url 'blog:blog-category' cat_id=cat.id %}">{{ cat.name }} </a> {% if not forloop.last %},{%endif %}
+            <a href="{% url 'blog:blog-category' cat_id=cat.id %}">{{ cat.name }} </a> {% if not forloop.last %},{%endif%}
             {% endfor %}
         </p>
 
