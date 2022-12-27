@@ -61,16 +61,13 @@ class Comment(models.Model):
     replied_to = models.ForeignKey("self", on_delete=models.SET_NULL,null=True,blank=True)
     message = models.TextField(blank=False)
     approved = models.BooleanField(default=False)
-
-    created_date = models.DateTimeField(auto_now_add=True)
-    update_date = models.DateTimeField(auto_now=True)
     
 
     created_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.id) + "-" + str(self.commenter)
+        return str(self.id) + "-" + str(self.commenter) + "-" + str(self.post.id)
 
     class  Meta:
         ordering = ['-created_date']

@@ -81,7 +81,7 @@ class BlogDetail(CreateView):
         return context
 
     def get(self, request, *args, **kwargs):
-        post = get_object_or_404(Post,id=self.kwargs['pk'])
+        post = get_object_or_404(Post,id=self.kwargs['pk'],status=True)
         post.counted_view += 1
         post.save()
         return super().get(request, *args, **kwargs)

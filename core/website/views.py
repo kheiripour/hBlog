@@ -1,7 +1,5 @@
-
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView,CreateView
-from captcha.helpers import captcha_image_url
+from django.views.generic import CreateView
 from .models import Slider,Contact,Newsletter
 from .forms import ContactForm
 from datetime import datetime
@@ -55,13 +53,6 @@ class ContactView(CreateView):
         else:
             form.instance.name = self.request.POST.get('name')
             form.instance.email = self.request.POST.get('email')
-
+        messages.add_message(self.request, messages.SUCCESS,
+                                 'Your message recieved successfully, Thank You.')
         return super().form_valid(form)
-
-
-
-
-
-
-
-
