@@ -22,9 +22,7 @@ django-mail-templated
 # reformatting
 # black
 # flake8
-# autopep8 # to use by vs code auto formater on save
-# pytest
-# pytest-django
+pytest-django
 Faker
 
 # background proccess and cache

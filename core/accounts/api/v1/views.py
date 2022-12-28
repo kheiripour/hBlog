@@ -28,7 +28,7 @@ class RegistrationApiView(generics.GenericAPIView):
         user_obj = get_object_or_404(User, email=email)
         token = self.get_tokens_for_user(user_obj) 
         scheme = request.scheme
-        host = request.META["HTTP_HOST"]
+        host = request.META.get('HTTP_HOST', '127.0.0.1:8000')
         email_obj = EmailMessage(
             "email/activation.html",
             {
@@ -81,7 +81,7 @@ class ConfirmActivationResend(generics.GenericAPIView):
         user = serializer.validated_data["user"]
         token = self.get_tokens_for_user(user)
         scheme = request.scheme
-        host = request.META["HTTP_HOST"]
+        host = request.META.get('HTTP_HOST', '127.0.0.1:8000')
         email_obj = EmailMessage(
             "email/activation.html",
             {
@@ -175,7 +175,7 @@ class ResetPasswordView(generics.GenericAPIView):
         refresh = RefreshToken.for_user(user)
         token = refresh.access_token
         scheme = request.scheme
-        host = request.META["HTTP_HOST"]
+        host = request.META.get('HTTP_HOST', '127.0.0.1:8000')
         email_obj = EmailMessage(
             "email/reset_password.html",
             {
