@@ -8,6 +8,7 @@ class Slider(models.Model):
     post = models.ForeignKey(Post,on_delete=models.CASCADE)
     snippet = models.TextField(max_length=200,blank=True,help_text="Leave it blank to use post snippet.")
     image = models.ImageField(upload_to='slider/',null=True,blank=True,help_text="Prefer 1300 x 500 size")
+    order = models.PositiveBigIntegerField(blank=True,null=True)
     is_active = models.BooleanField(default=True)
 
 

@@ -13,7 +13,7 @@ class IndexView(CreateView):
     success_url = reverse_lazy('website:index')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        slides = Slider.objects.filter(is_active=True,post__status=True,post__pub_date__lte=datetime.now())
+        slides = Slider.objects.filter(is_active=True,post__status=True,post__pub_date__lte=datetime.now()).order_by('order')
         for slide in  slides:
             slide.post.image = slide.post.active_version.image
             slide.post.title = slide.post.active_version.title

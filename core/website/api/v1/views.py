@@ -1,6 +1,8 @@
 from rest_framework import viewsets, mixins, permissions, status
 from rest_framework.response import Response
-from .serializer import ContactSerializer, NewsletterSerializer
+from datetime import datetime
+from .serializer import ContactSerializer, NewsletterSerializer, SliderSerializer
+from ...models import Slider
 
 
 class ContactModelViewSet(viewsets.GenericViewSet,mixins.CreateModelMixin):
@@ -21,3 +23,8 @@ class ContactModelViewSet(viewsets.GenericViewSet,mixins.CreateModelMixin):
 class NewsletterModelViewSet(viewsets.GenericViewSet,mixins.CreateModelMixin):
     serializer_class = NewsletterSerializer
     permission_classes = [permissions.AllowAny]
+
+class SliderModelViewSet(viewsets.GenericViewSet,mixins.ListModelMixin):
+    serializer_class = SliderSerializer
+    permission_classes = [permissions.AllowAny]
+    queryset = Slider.objects.filter(is_active=True, post__status=True, post__pub_date__lte=datetime.now()).order_by('order')

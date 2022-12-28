@@ -3,7 +3,7 @@ from .models import Slider,Contact,Newsletter
 # Register your models here.
 
 class SliderAdmin(admin.ModelAdmin):
-    list_display=('id','post','snippet','image','is_active')
+    list_display=('id','order','post','snippet','image','is_active')
 
 admin.site.register(Slider,SliderAdmin)
 
