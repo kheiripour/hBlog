@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ...models import User
+from ...models import User, Profile
 from django.contrib.auth.password_validation import (
     validate_password,
 )
@@ -152,3 +152,21 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
         except exceptions.ValidationError as er:
             raise serializers.ValidationError({"new password": er.messages})
         return super().validate(attrs)
+
+class ProfileSerializer(serializers.ModelSerializer):
+    absolute_url = serializers.SerializerMethodField()
+    class Meta:
+        model = Profile
+        fields = ['absolute_url','user','first_name','last_name','phone_number','address','image','about']
+        read_only_fields = ['user']
+
+    def get_absolute_url(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.pk)
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        request = self.context.get('request',None)
+        if request.parser_context.get('kwargs').get('pk'):
+            rep.pop('absolute_url', None)
+        return rep

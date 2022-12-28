@@ -1,14 +1,12 @@
 from rest_framework import generics, status
-from .serializers import *
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-)
+from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import viewsets, mixins
 import jwt
 from django.core.exceptions import ObjectDoesNotExist
 from jwt import ExpiredSignatureError, InvalidSignatureError
@@ -16,6 +14,7 @@ from core.settings import SECRET_KEY
 from django.shortcuts import get_object_or_404
 from mail_templated import EmailMessage
 from website.utils import EmailThread
+from .serializers import *
 
 
 class RegistrationApiView(generics.GenericAPIView):
@@ -27,7 +26,7 @@ class RegistrationApiView(generics.GenericAPIView):
         email = serializer.validated_data["email"]
         serializer.save()
         user_obj = get_object_or_404(User, email=email)
-        token = self.get_tokens_for_user(user_obj)
+        token = self.get_tokens_for_user(user_obj) 
         scheme = request.scheme
         host = request.META["HTTP_HOST"]
         email_obj = EmailMessage(
@@ -220,3 +219,10 @@ class ResetPasswordConfirmView(generics.GenericAPIView):
             {"detail": "Password has been reset successfully"},
             status=status.HTTP_200_OK,
         )
+
+class ProfileModelViewSet(viewsets.GenericViewSet,mixins.UpdateModelMixin,mixins.ListModelMixin,mixins.RetrieveModelMixin):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProfileSerializer
+    
+    def get_queryset(self):
+        return Profile.objects.filter(user=self.request.user)

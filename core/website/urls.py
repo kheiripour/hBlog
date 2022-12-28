@@ -8,8 +8,6 @@ urlpatterns = [
     path("",IndexView.as_view(),name='index'),
     path("contact/",ContactView.as_view(),name="contact"),
     
-    
-
-    # path("api/v1/", include("blog.api.v1.urls")),
+    path("api/v1/", include("website.api.v1.urls")),
 ]
    
