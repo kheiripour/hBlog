@@ -36,6 +36,30 @@
                         {% endfor %}
                     </p>
 
+
+                    <div class="container  col-lg-8 mt-5 mt-lg-0">
+                        <!-- Author Bio -->
+                        <div class="text-center rounded py-2 px-4 border border-5 border-warning">
+                            <p class="h4 text-secondary">About Author</p>
+                            <a href="{% url 'blog:blog-author' author_id=post.author.id  %}">
+                            <img src="{{ post.author.image.url }}" class="text-center profile rounded-circle mx-auto">
+                            <h3 class="text-success mb-3">{{post.author}}</h3></a>
+                            <p class=" m-0">{{post.author.about}}</p>
+                        </div>
+                        
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
                     <div class="comment-main">
                         <h3 class="blog-title">Comments<span> ({{ comments.count }})</span></h3>
                         <ol class="comments">

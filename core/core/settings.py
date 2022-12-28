@@ -205,7 +205,6 @@ CACHES = {
 
 # summernote settings:
 X_FRAME_OPTIONS = 'SAMEORIGIN'
-SUMMERNOTE_THEME = 'bs5'
 SUMMERNOTE_CONFIG = {
     'summernote': {
         
