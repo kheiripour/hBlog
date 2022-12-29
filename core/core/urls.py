@@ -20,6 +20,11 @@ from django.conf.urls.static import static
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from django.contrib.sitemaps.views import sitemap
+from django.views.decorators.cache import cache_page
+
+from website.sitemaps import StaticViewSitemap
+from blog.sitemaps import BlogSitemap
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -31,9 +36,13 @@ schema_view = get_schema_view(
         license=openapi.License(name="MIT License"),
     ),
     public=True,
-    permission_classes=[permissions.AllowAny],
+    permission_classes=[permissions.IsAdminUser],
 )
 
+sitemaps = {
+    'static': StaticViewSitemap,
+    'blog' : BlogSitemap
+}
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -43,7 +52,6 @@ urlpatterns = [
     path("blog/", include("blog.urls")),
     
     path("", include("website.urls")),
-
 
     #swagger and recoc docs:
     path(
@@ -63,6 +71,11 @@ urlpatterns = [
     ),
     path('summernote/', include('django_summernote.urls')),
     path('captcha/', include('captcha.urls')),
+
+    path('sitemap.xml', cache_page(60*60*24)(sitemap), {'sitemaps': sitemaps},
+         name='django.contrib.sitemaps.views.sitemap'),
+
+    path('robots.txt', include('robots.urls')),
 ]
 
 if settings.DEBUG:

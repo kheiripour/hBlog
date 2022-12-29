@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-
+    'django.contrib.sitemaps',
+    'robots',
+    'compressor',
     
     'accounts',
     'blog',
@@ -153,8 +155,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
+    os.path.join(BASE_DIR, "static"),]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -163,6 +165,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Site configs
 SITE_ID = 2
 
+# robots
+ROBOTS_USE_SITEMAP = True
+ROBOTS_USE_HOST = True
+ROBOTS_CACHE_TIMEOUT = 60*60*24
+
+# compressor
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+)
+COMPRESS_ENABLED = True
+COMPRESS_ROOT = os.path.join(BASE_DIR, "static")
 
 # rest framework settings:
 REST_FRAMEWORK = {
@@ -220,8 +236,3 @@ CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
 # crispy configs:
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
-
-
-
-
-

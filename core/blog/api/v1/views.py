@@ -5,10 +5,12 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from .permissions import IsAuthor
 from .serializers import *
 from .paginations import BlogPagination
-from ...models import Post,PostVersion, Category, Comment
+from ...models import Post,PostVersion, Comment
 
 class BlogModelViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
@@ -23,7 +25,9 @@ class BlogModelViewSet(viewsets.ReadOnlyModelViewSet):
         else:
             return BlogModelSerializer
 
- 
+    @method_decorator(cache_page(60))
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     @action(detail=True, methods=['post'])
     def send_comment(self, request, pk=None):
@@ -80,8 +84,7 @@ class AuthorModelViewSet(viewsets.ReadOnlyModelViewSet,mixins.CreateModelMixin):
         post.save()
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        
-        
+           
     @action(detail=True, methods=['get','post'])
     def change_request(self, request, pk=None):
         post = self.get_object()
@@ -104,11 +107,3 @@ class AuthorModelViewSet(viewsets.ReadOnlyModelViewSet,mixins.CreateModelMixin):
             for cat in serializer.validated_data['category']:
                 post_version.category.add(cat)
             return Response ({'detail':'version request sent successfully'},status=status.HTTP_201_CREATED)
-
-
-
-    
-
-    
-    
-
