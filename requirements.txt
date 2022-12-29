@@ -34,4 +34,4 @@ django-celery-beat
 django-redis
 
 # database
-# psycopg2-binary
+psycopg2-binary

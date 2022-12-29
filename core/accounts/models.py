@@ -118,13 +118,3 @@ def save_profile(sender, instance, created, **kwargs):
             instance.user.user_permissions.add(perm)
     else:
         instance.user.user_permissions.clear()
-        
-    
-   
-        
-        
-
-        
-
-
-
