@@ -22,7 +22,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.contrib.sitemaps.views import sitemap
 from django.views.decorators.cache import cache_page
-
+from website.views import handler404_view
 from website.sitemaps import StaticViewSitemap
 from blog.sitemaps import BlogSitemap
 
@@ -48,7 +48,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
     path("api-auth/", include("rest_framework.urls")),
-
     path("blog/", include("blog.urls")),
     
     path("", include("website.urls")),
@@ -87,3 +86,5 @@ if settings.DEBUG:
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT,
     )
+
+handler404 = 'website.views.handler404_view'

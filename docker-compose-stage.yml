@@ -20,7 +20,6 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       
-      
   backend:
     build: .
     container_name: backend
@@ -44,13 +43,22 @@ services:
 
   worker:
     build: .
-    command: celery -A core worker --loglevel=info -B --scheduler django_celery_beat.schedulers:DatabaseScheduler    
+    command: celery -A core worker --loglevel=info 
     volumes:
       - ./core:/app
     depends_on: 
       - redis
       - backend
 
+  beater:
+    build: .
+    command: celery -A core beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - ./core:/app
+    depends_on: 
+      - redis
+      - backend
+      
   nginx:
     image: nginx
     container_name: nginx

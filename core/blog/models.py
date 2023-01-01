@@ -37,7 +37,7 @@ class Post(models.Model):
     counted_view = models.IntegerField(default=0,blank=True,null=True)
     status = models.BooleanField(default=False,blank=True) 
 
-    pub_date = models.DateTimeField(null=True, blank=True,default=now)    
+    pub_date = models.DateTimeField(null=True, blank=True)    
     
     active_version = models.ForeignKey(PostVersion,on_delete=models.SET_NULL,blank=True,null=True,related_name='+')
 
