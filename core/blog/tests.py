@@ -2,7 +2,8 @@ import pytest
 from django.urls import reverse
 from rest_framework.test import APIClient
 from django.templatetags.static import static
-from datetime import datetime, timedelta
+from django.utils.timezone import now ,timedelta
+from django.utils.timezone import timedelta,now
 from accounts.models import User
 from .models import Post, PostVersion, Category, Comment
 
@@ -37,7 +38,7 @@ def fakepost(fakeuser1, fakecats):
     post = Post.objects.create(
         author=user.profile,
         status=True,
-        pub_date=datetime.now()-timedelta(days=1)
+        pub_date=now()-timedelta(days=1)
     )
     post_version = PostVersion.objects.create(
         post=post,

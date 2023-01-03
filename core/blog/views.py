@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from datetime import datetime
+from django.utils.timezone import now 
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from .models import Post, PostVersion, Comment, Category
@@ -22,7 +22,7 @@ class BlogList(ListView):
     extra_context = {}
 
     def get_queryset(self):
-        posts = Post.objects.filter(status=True, pub_date__lte=datetime.now())
+        posts = Post.objects.filter(status=True, pub_date__lte=now())
 
         # Author filtration
         if (key := self.kwargs.get("author_id")) is not None:
@@ -81,7 +81,7 @@ class BlogDetail(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         post = get_object_or_404(
-            Post, id=self.kwargs["pk"], status=True, pub_date__lte=datetime.now()
+            Post, id=self.kwargs["pk"], status=True, pub_date__lte=now()
         )
         context["title"] = post.active_version.title
         comments = Comment.objects.filter(post=post, approved=True)
@@ -107,7 +107,7 @@ class BlogDetail(CreateView):
         get method overridden for counting views.
         """
         post = get_object_or_404(
-            Post, id=self.kwargs["pk"], status=True, pub_date__lte=datetime.now()
+            Post, id=self.kwargs["pk"], status=True, pub_date__lte=now()
         )
         post.counted_view += 1
         post.save()

@@ -1,6 +1,6 @@
 from rest_framework import viewsets, mixins, permissions, status
 from rest_framework.response import Response
-from datetime import datetime
+from django.utils.timezone import now 
 from .serializer import ContactSerializer, NewsletterSerializer, SliderSerializer
 from ...models import Slider
 
@@ -45,5 +45,5 @@ class SliderModelViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     serializer_class = SliderSerializer
     permission_classes = [permissions.AllowAny]
     queryset = Slider.objects.filter(
-        is_active=True, post__status=True, post__pub_date__lte=datetime.now()
+        is_active=True, post__status=True, post__pub_date__lte=now()
     ).order_by("order")

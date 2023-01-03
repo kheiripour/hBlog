@@ -1,5 +1,5 @@
 from django.template import Library
-from datetime import datetime
+from django.utils.timezone import now
 from blog.models import Post, Category
 
 register = Library()
@@ -10,7 +10,7 @@ def main_latest(count):
     """
     Provide latest active published posts giving count argument and order by descending pub_date
     """
-    posts = Post.objects.filter(status=True, pub_date__lte=datetime.now()).order_by(
+    posts = Post.objects.filter(status=True, pub_date__lte=now()).order_by(
         "-pub_date"
     )[:count]
     for post in posts:
@@ -26,7 +26,7 @@ def blog_categories():
     """
     Return categories count sorted by most counts.
     """
-    posts = Post.objects.filter(status=True, pub_date__lte=datetime.now())
+    posts = Post.objects.filter(status=True, pub_date__lte=now())
     categories = Category.objects.all()
     cat_dict = {}
     for cat in categories:

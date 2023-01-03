@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from datetime import date
+from django.utils.timezone import now, timedelta
 from django.contrib.sites.models import Site
 from mail_templated import EmailMessage
 from blog.models import Post
@@ -13,7 +13,7 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        posts = Post.objects.filter(status=True, pub_date__date=date.today())
+        posts = Post.objects.filter(status=True, pub_date__date__lte=now(), pub_date__gte=now()-timedelta(days=1))
         if posts:
             http = "http://"
             domain = Site.objects.get_current().domain

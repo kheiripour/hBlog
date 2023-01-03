@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.shortcuts import render
-from datetime import datetime
+from django.utils.timezone import now 
 from django.contrib import messages
 from .models import Slider, Contact, Newsletter
 from .forms import ContactForm
@@ -23,7 +23,7 @@ class IndexView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         slides = Slider.objects.filter(
-            is_active=True, post__status=True, post__pub_date__lte=datetime.now()
+            is_active=True, post__status=True, post__pub_date__lte=now()
         ).order_by("order")
         for slide in slides:
             slide.post.image = slide.post.active_version.image

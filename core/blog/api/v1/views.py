@@ -7,7 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from datetime import datetime
+from django.utils.timezone import now 
 from .permissions import IsAuthor
 from .serializers import CommentSerializer, BlogModelSerializer, PostVersionSerializer
 from .paginations import BlogPagination
@@ -22,7 +22,7 @@ class BlogModelViewSet(viewsets.ReadOnlyModelViewSet):
     """
 
     permission_classes = [AllowAny]
-    queryset = Post.objects.filter(status=True, pub_date__lte=datetime.now())
+    queryset = Post.objects.filter(status=True, pub_date__lte=now())
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ["author", "active_version__category"]
     search_fields = ["active_version__content"]
