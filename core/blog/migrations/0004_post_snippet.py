@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0003_post_pub_date'),
+        ("blog", "0003_post_pub_date"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='post',
-            name='snippet',
-            field=models.TextField(default='Summary description for blogs page'),
+            model_name="post",
+            name="snippet",
+            field=models.TextField(default="Summary description for blogs page"),
         ),
     ]

@@ -7,54 +7,82 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0006_alter_post_category'),
+        ("blog", "0006_alter_post_category"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='post',
-            options={'ordering': ['-created_date']},
+            name="post",
+            options={"ordering": ["-created_date"]},
         ),
         migrations.RemoveField(
-            model_name='post',
-            name='category',
+            model_name="post",
+            name="category",
         ),
         migrations.RemoveField(
-            model_name='post',
-            name='content',
+            model_name="post",
+            name="content",
         ),
         migrations.RemoveField(
-            model_name='post',
-            name='image',
+            model_name="post",
+            name="image",
         ),
         migrations.RemoveField(
-            model_name='post',
-            name='snippet',
+            model_name="post",
+            name="snippet",
         ),
         migrations.RemoveField(
-            model_name='post',
-            name='title',
+            model_name="post",
+            name="title",
         ),
         migrations.CreateModel(
-            name='PostVersion',
+            name="PostVersion",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('number', models.PositiveSmallIntegerField()),
-                ('title', models.CharField(max_length=255)),
-                ('content', models.TextField()),
-                ('snippet', models.TextField(default='Summary description for blogs page', max_length=200)),
-                ('image', models.ImageField(blank=True, null=True, upload_to='posts/')),
-                ('author_note', models.TextField(blank=True)),
-                ('admin_note', models.TextField(blank=True)),
-                ('created_date', models.DateTimeField(auto_now_add=True)),
-                ('update_date', models.DateTimeField(auto_now=True)),
-                ('category', models.ManyToManyField(help_text='First will be main category', to='blog.Category')),
-                ('post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='blog.post')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("number", models.PositiveSmallIntegerField()),
+                ("title", models.CharField(max_length=255)),
+                ("content", models.TextField()),
+                (
+                    "snippet",
+                    models.TextField(
+                        default="Summary description for blogs page", max_length=200
+                    ),
+                ),
+                ("image", models.ImageField(blank=True, null=True, upload_to="posts/")),
+                ("author_note", models.TextField(blank=True)),
+                ("admin_note", models.TextField(blank=True)),
+                ("created_date", models.DateTimeField(auto_now_add=True)),
+                ("update_date", models.DateTimeField(auto_now=True)),
+                (
+                    "category",
+                    models.ManyToManyField(
+                        help_text="First will be main category", to="blog.Category"
+                    ),
+                ),
+                (
+                    "post",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="blog.post"
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='post',
-            name='active_version',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='blog.postversion'),
+            model_name="post",
+            name="active_version",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="+",
+                to="blog.postversion",
+            ),
         ),
     ]

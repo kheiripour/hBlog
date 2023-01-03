@@ -1,14 +1,15 @@
 from django.urls import path
-from .views import *
+from .views import (ProfileModelViewSet, ConfirmActivationResend, ConfirmActivation, RegistrationApiView, ChangePasswordView, CustomObtainAuthToken, CustomDiscardAuthToken, CustomTokenObtainPairView, ResetPasswordView, ResetPasswordConfirmView)
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
 from rest_framework.routers import DefaultRouter
-router = DefaultRouter()
-router.register('profile',ProfileModelViewSet,basename='profile')
 
-app_name = 'api-v1'
+router = DefaultRouter()
+router.register("profile", ProfileModelViewSet, basename="profile")
+
+app_name = "api-v1"
 
 urlpatterns = [
     # registration:
@@ -72,5 +73,4 @@ urlpatterns = [
         name="reset-password-confirm",
     ),
 ]
-
 urlpatterns += router.urls

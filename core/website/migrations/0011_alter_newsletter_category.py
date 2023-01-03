@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0013_alter_postversion_post'),
-        ('website', '0010_alter_newsletter_category'),
+        ("blog", "0013_alter_postversion_post"),
+        ("website", "0010_alter_newsletter_category"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='newsletter',
-            name='category',
-            field=models.ManyToManyField(blank=True, to='blog.Category'),
+            model_name="newsletter",
+            name="category",
+            field=models.ManyToManyField(blank=True, to="blog.Category"),
         ),
     ]

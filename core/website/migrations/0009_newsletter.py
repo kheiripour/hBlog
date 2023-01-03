@@ -6,17 +6,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0013_alter_postversion_post'),
-        ('website', '0008_rename_id_done_contact_is_done'),
+        ("blog", "0013_alter_postversion_post"),
+        ("website", "0008_rename_id_done_contact_is_done"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Newsletter',
+            name="Newsletter",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('email', models.EmailField(max_length=254)),
-                ('category', models.ManyToManyField(to='blog.Category')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("email", models.EmailField(max_length=254)),
+                ("category", models.ManyToManyField(to="blog.Category")),
             ],
         ),
     ]

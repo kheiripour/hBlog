@@ -7,34 +7,41 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0017_profile_is_complete'),
-        ('blog', '0004_post_snippet'),
+        ("accounts", "0017_profile_is_complete"),
+        ("blog", "0004_post_snippet"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='comment',
-            name='name',
+            model_name="comment",
+            name="name",
             field=models.CharField(blank=True, max_length=20),
         ),
         migrations.AlterField(
-            model_name='comment',
-            name='commenter',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='accounts.profile'),
+            model_name="comment",
+            name="commenter",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="accounts.profile",
+            ),
         ),
         migrations.AlterField(
-            model_name='post',
-            name='image',
-            field=models.ImageField(blank=True, null=True, upload_to='posts/'),
+            model_name="post",
+            name="image",
+            field=models.ImageField(blank=True, null=True, upload_to="posts/"),
         ),
         migrations.AlterField(
-            model_name='post',
-            name='pub_date',
+            model_name="post",
+            name="pub_date",
             field=models.DateField(auto_now_add=True, null=True),
         ),
         migrations.AlterField(
-            model_name='post',
-            name='snippet',
-            field=models.TextField(default='Summary description for blogs page', max_length=200),
+            model_name="post",
+            name="snippet",
+            field=models.TextField(
+                default="Summary description for blogs page", max_length=200
+            ),
         ),
     ]

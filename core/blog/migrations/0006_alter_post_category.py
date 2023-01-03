@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0005_auto_20221216_2307'),
+        ("blog", "0005_auto_20221216_2307"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='post',
-            name='category',
-            field=models.ManyToManyField(help_text='First will be main category', to='blog.Category'),
+            model_name="post",
+            name="category",
+            field=models.ManyToManyField(
+                help_text="First will be main category", to="blog.Category"
+            ),
         ),
     ]

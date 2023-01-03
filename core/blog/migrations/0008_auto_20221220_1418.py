@@ -7,18 +7,26 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0007_auto_20221219_2156'),
+        ("blog", "0007_auto_20221219_2156"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='post',
-            name='active_version',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='blog.postversion'),
+            model_name="post",
+            name="active_version",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="+",
+                to="blog.postversion",
+            ),
         ),
         migrations.AlterField(
-            model_name='postversion',
-            name='snippet',
-            field=models.TextField(default='Summary description for blogs page', max_length=150),
+            model_name="postversion",
+            name="snippet",
+            field=models.TextField(
+                default="Summary description for blogs page", max_length=150
+            ),
         ),
     ]

@@ -22,8 +22,8 @@ django_compressor
 django-mail-templated
 
 # reformatting
-# black
-# flake8
+black
+flake8
 pytest-django
 Faker
 

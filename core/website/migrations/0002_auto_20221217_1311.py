@@ -6,18 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('website', '0001_initial'),
+        ("website", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='slider',
-            name='image',
-            field=models.ImageField(blank=True, help_text='Prefer 1300 x 500 size', null=True, upload_to='slider/'),
+            model_name="slider",
+            name="image",
+            field=models.ImageField(
+                blank=True,
+                help_text="Prefer 1300 x 500 size",
+                null=True,
+                upload_to="slider/",
+            ),
         ),
         migrations.AlterField(
-            model_name='slider',
-            name='snippet',
+            model_name="slider",
+            name="snippet",
             field=models.TextField(blank=True, max_length=255),
         ),
     ]

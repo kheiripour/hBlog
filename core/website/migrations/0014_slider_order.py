@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('website', '0013_alter_slider_snippet'),
+        ("website", "0013_alter_slider_snippet"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='slider',
-            name='order',
+            model_name="slider",
+            name="order",
             field=models.PositiveBigIntegerField(blank=True, null=True),
         ),
     ]

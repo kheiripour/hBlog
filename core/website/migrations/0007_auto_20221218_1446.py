@@ -7,24 +7,30 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0017_profile_is_complete'),
-        ('website', '0006_auto_20221218_1432'),
+        ("accounts", "0017_profile_is_complete"),
+        ("website", "0006_auto_20221218_1432"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='contact',
-            name='admin_note',
+            model_name="contact",
+            name="admin_note",
             field=models.TextField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='contact',
-            name='id_done',
+            model_name="contact",
+            name="id_done",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='contact',
-            name='sender',
-            field=models.ForeignKey(blank=True, help_text='If this filed is empty, it means user were not authenticated.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='accounts.profile'),
+            model_name="contact",
+            name="sender",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="If this filed is empty, it means user were not authenticated.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="accounts.profile",
+            ),
         ),
     ]

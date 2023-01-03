@@ -6,13 +6,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0012_auto_20221211_1315'),
+        ("accounts", "0012_auto_20221211_1315"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='profile',
-            name='image',
-            field=models.ImageField(blank=True, height_field='image_height', null=True, upload_to='profiles/', width_field='image_width'),
+            model_name="profile",
+            name="image",
+            field=models.ImageField(
+                blank=True,
+                height_field="image_height",
+                null=True,
+                upload_to="profiles/",
+                width_field="image_width",
+            ),
         ),
     ]

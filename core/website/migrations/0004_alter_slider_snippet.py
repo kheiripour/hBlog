@@ -6,13 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('website', '0003_alter_slider_snippet'),
+        ("website", "0003_alter_slider_snippet"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='slider',
-            name='snippet',
-            field=models.TextField(blank=True, default='Summary description for blogs page', help_text='Leave it blank to use post snippet.', max_length=200),
+            model_name="slider",
+            name="snippet",
+            field=models.TextField(
+                blank=True,
+                default="Summary description for blogs page",
+                help_text="Leave it blank to use post snippet.",
+                max_length=200,
+            ),
         ),
     ]

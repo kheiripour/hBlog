@@ -7,13 +7,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0017_alter_post_pub_date'),
+        ("blog", "0017_alter_post_pub_date"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='post',
-            name='pub_date',
-            field=models.DateTimeField(blank=True, default=datetime.datetime.today, null=True),
+            model_name="post",
+            name="pub_date",
+            field=models.DateTimeField(
+                blank=True, default=datetime.datetime.today, null=True
+            ),
         ),
     ]

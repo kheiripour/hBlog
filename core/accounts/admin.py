@@ -8,14 +8,13 @@ from .models import User, Profile
 class CustomUserAdmin(UserAdmin):
     model = User
     list_display = (
-        'id',
+        "id",
         "email",
         "is_superuser",
         "is_active",
         "is_verified",
-        
     )
-    list_filter = ("email", "is_superuser", "is_active" )
+    list_filter = ("email", "is_superuser", "is_active")
     search_fields = ("email",)
     ordering = ("-id",)
     fieldsets = (
@@ -32,9 +31,8 @@ class CustomUserAdmin(UserAdmin):
                     "is_staff",
                     "is_active",
                     "is_superuser",
-                    "is_verified",
-                    
-                ),
+                    "is_verified"
+                )
             },
         ),
         (
@@ -63,18 +61,28 @@ class CustomUserAdmin(UserAdmin):
                     "is_active",
                     "is_superuser",
                     "is_verified",
-                    
                 ),
             },
         ),
     )
 
+
 class ProfileAdmin(admin.ModelAdmin):
     model = Profile
-    list_display = ['id','user','first_name','last_name','phone_number','is_complete',"is_author",'created_date']
-    list_filter = ['is_complete',"is_author"]
+    list_display = [
+        "id",
+        "user",
+        "first_name",
+        "last_name",
+        "phone_number",
+        "is_complete",
+        "is_author",
+        "created_date",
+    ]
+    list_filter = ["is_complete", "is_author"]
     ordering = ("-id",)
-    search_fields = ("first_name","last_name")
+    search_fields = ("first_name", "last_name")
+
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(User, CustomUserAdmin)

@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('website', '0005_contact'),
+        ("website", "0005_contact"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='contact',
-            name='email',
+            model_name="contact",
+            name="email",
             field=models.EmailField(blank=True, max_length=254),
         ),
         migrations.AlterField(
-            model_name='contact',
-            name='name',
+            model_name="contact",
+            name="name",
             field=models.CharField(blank=True, max_length=255),
         ),
         migrations.AlterField(
-            model_name='contact',
-            name='subject',
-            field=models.CharField(default='', max_length=255),
+            model_name="contact",
+            name="subject",
+            field=models.CharField(default="", max_length=255),
         ),
     ]

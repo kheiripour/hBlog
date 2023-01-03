@@ -3,11 +3,12 @@ from django.contrib.auth.models import (
     BaseUserManager,
     AbstractBaseUser,
     PermissionsMixin,
-    Permission
+    Permission,
 )
 from django.utils.translation import ugettext_lazy as _
-from django.db.models.signals import post_save , pre_delete
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
+
 
 class UserManager(BaseUserManager):
     """
@@ -48,7 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    is_verified = models.BooleanField(default=False)  
+    is_verified = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -63,14 +64,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Profile(models.Model):
     """
-    Profile model where personal information about user will store. 
+    Profile model where personal information about user will store.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255, blank=True)
     address = models.TextField(blank=True)
-    image = models.ImageField(blank=True,null=True, upload_to="profiles/")
+    image = models.ImageField(blank=True, null=True, upload_to="profiles/")
     about = models.TextField(blank=True)
     is_complete = models.BooleanField(default=False)
     is_author = models.BooleanField(default=False)
@@ -90,16 +91,17 @@ class Profile(models.Model):
             this = Profile.objects.get(id=self.id)
             if this.image != self.image:
                 this.image.delete(save=False)
-        except Exception as e: pass         
-        super(Profile, self).save(*args, **kwargs)
-
+        except Exception: 
+            pass         
+        super(Profile, self).save(*args, **kwargs) 
 @receiver(post_save, sender=User)
-def save_profile(sender, instance, created, **kwargs):
+def create_profile(sender, instance, created, **kwargs):
     """
     A signal for creating user profile when user registered successfully.
     """
     if created:
         Profile.objects.create(user=instance)
+
 
 @receiver(pre_delete, sender=Profile)
 def image_delete_handler(sender, instance, *args, **kwargs):
@@ -109,16 +111,17 @@ def image_delete_handler(sender, instance, *args, **kwargs):
     if instance.image and instance.image.url:
         instance.image.delete()
 
+
 @receiver(post_save, sender=Profile)
 def save_profile(sender, instance, created, **kwargs):
     """
     A signal for granting authorship permission to user based on is_author field in profile.
     """
     if instance.is_author:
-        permissions = list() 
-        permissions.append(Permission.objects.get(name='Can add post'))
-        permissions.append(Permission.objects.get(name='Can change post'))
-        permissions.append(Permission.objects.get(name='Can add post version'))
+        permissions = list()
+        permissions.append(Permission.objects.get(name="Can add post"))
+        permissions.append(Permission.objects.get(name="Can change post"))
+        permissions.append(Permission.objects.get(name="Can add post version"))
         for perm in permissions:
             instance.user.user_permissions.add(perm)
     else:

@@ -7,13 +7,18 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0012_alter_postversion_number'),
+        ("blog", "0012_alter_postversion_number"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='postversion',
-            name='post',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='blog.post'),
+            model_name="postversion",
+            name="post",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="blog.post",
+            ),
         ),
     ]

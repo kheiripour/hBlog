@@ -15,8 +15,18 @@ from mail_templated import EmailMessage
 from django.contrib.sites.models import Site
 from core.settings import SECRET_KEY
 from website.utils import EmailThread
-from .serializers import (RegistrationSerializer, ConfirmResendSerializer, ChangePasswordSerializer, CustomAuthTokenSerializer, CustomTokenObtainPairSerializer, PasswordResetSerializer, PasswordResetConfirmSerializer, ProfileSerializer)
+from .serializers import (
+    RegistrationSerializer,
+    ConfirmResendSerializer,
+    ChangePasswordSerializer,
+    CustomAuthTokenSerializer,
+    CustomTokenObtainPairSerializer,
+    PasswordResetSerializer,
+    PasswordResetConfirmSerializer,
+    ProfileSerializer,
+)
 from ...models import User, Profile
+
 
 class RegistrationApiView(generics.GenericAPIView):
     serializer_class = RegistrationSerializer
@@ -24,13 +34,14 @@ class RegistrationApiView(generics.GenericAPIView):
     To get email and passwords and make new user if valid.
     If user created, activation code will send and profile will create.
     """
+
     def post(self, request, *arg, **kwargs):
         serializer = RegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data["email"]
         serializer.save()
         user_obj = get_object_or_404(User, email=email)
-        token = self.get_tokens_for_user(user_obj) 
+        token = self.get_tokens_for_user(user_obj)
         scheme = request.scheme
         host = Site.objects.get_current().domain
         email_obj = EmailMessage(
@@ -39,7 +50,7 @@ class RegistrationApiView(generics.GenericAPIView):
                 "token": token,
                 "scheme": scheme,
                 "host": host,
-                "app_url": '/accounts/api/v1/confirm-activation/',
+                "app_url": "/accounts/api/v1/confirm-activation/",
             },
             "admin@admin.com",
             to=[email],
@@ -51,10 +62,12 @@ class RegistrationApiView(generics.GenericAPIView):
         refresh = RefreshToken.for_user(user)
         return str(refresh.access_token)
 
+
 class ConfirmActivation(APIView):
     """
     Validating jwt given by activation link and verify user.
-    """    
+    """
+
     def get(self, request, token):
         try:
             token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
@@ -81,6 +94,7 @@ class ConfirmActivationResend(generics.GenericAPIView):
     """
     In case of new activation link need for user. we will send it again using this view.
     """
+
     serializer_class = ConfirmResendSerializer
 
     def post(self, request, *args, **kwargs):
@@ -96,7 +110,7 @@ class ConfirmActivationResend(generics.GenericAPIView):
                 "token": token,
                 "scheme": scheme,
                 "host": host,
-                "app_url": '/accounts/api/v1/confirm-activation/',
+                "app_url": "/accounts/api/v1/confirm-activation/",
             },
             "admin@admin.com",
             to=[user.email],
@@ -111,10 +125,12 @@ class ConfirmActivationResend(generics.GenericAPIView):
         refresh = RefreshToken.for_user(user)
         return str(refresh.access_token)
 
+
 class ChangePasswordView(generics.GenericAPIView):
     """
-    This view is for when a user is authenticated and want to change password. 
+    This view is for when a user is authenticated and want to change password.
     """
+
     permission_classes = [IsAuthenticated]
     serializer_class = ChangePasswordSerializer
 
@@ -134,10 +150,12 @@ class ChangePasswordView(generics.GenericAPIView):
             status=status.HTTP_200_OK,
         )
 
+
 class CustomObtainAuthToken(ObtainAuthToken):
     """
     Create auth token to login by token instead of basic authentication.
     """
+
     serializer_class = CustomAuthTokenSerializer
 
     def post(self, request, *args, **kwargs):
@@ -154,11 +172,14 @@ class CustomObtainAuthToken(ObtainAuthToken):
                 "email": user.email,
             }
         )
+
+
 class CustomDiscardAuthToken(APIView):
     """
     Delete user auth token stored in token table.
     It also can be assumed as token logout.
     """
+
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -171,15 +192,20 @@ class CustomDiscardAuthToken(APIView):
             )
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class CustomTokenObtainPairView(TokenObtainPairView):
     """
     jwt generator. it will return access, refresh and user email.
     """
+
     serializer_class = CustomTokenObtainPairSerializer
+
+
 class ResetPasswordView(generics.GenericAPIView):
     """
     Send reset password email by jwt token.
     """
+
     serializer_class = PasswordResetSerializer
 
     def post(self, request, *args, **kwargs):
@@ -196,7 +222,7 @@ class ResetPasswordView(generics.GenericAPIView):
                 "token": token,
                 "scheme": scheme,
                 "host": host,
-                "app_url": '/accounts/api/v1/reset_password_confirm/',
+                "app_url": "/accounts/api/v1/reset_password_confirm/",
             },
             "admin@admin.com",
             to=[user.email],
@@ -207,10 +233,12 @@ class ResetPasswordView(generics.GenericAPIView):
             status=status.HTTP_200_OK,
         )
 
+
 class ResetPasswordConfirmView(generics.GenericAPIView):
     """
     Receiving reset password url, validate jwt, check new passwords and finally change password.
     """
+
     serializer_class = PasswordResetConfirmSerializer
 
     def put(self, request, token):
@@ -236,12 +264,19 @@ class ResetPasswordConfirmView(generics.GenericAPIView):
             status=status.HTTP_200_OK,
         )
 
-class ProfileModelViewSet(viewsets.GenericViewSet,mixins.UpdateModelMixin,mixins.ListModelMixin,mixins.RetrieveModelMixin):
+
+class ProfileModelViewSet(
+    viewsets.GenericViewSet,
+    mixins.UpdateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+):
     """
     Get and update user profile data.
     """
+
     permission_classes = [IsAuthenticated]
     serializer_class = ProfileSerializer
-    
+
     def get_queryset(self):
         return Profile.objects.filter(user=self.request.user)
