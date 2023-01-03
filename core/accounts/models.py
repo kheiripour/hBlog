@@ -9,9 +9,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import post_save , pre_delete
 from django.dispatch import receiver
 
-# Create your models here.
-
-
 class UserManager(BaseUserManager):
     """
     custom user model manager where email is the unique identifier
@@ -51,8 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    is_verified = models.BooleanField(default=False)
-    
+    is_verified = models.BooleanField(default=False)  
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -65,8 +61,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-
 class Profile(models.Model):
+    """
+    Profile model where personal information about user will store. 
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -87,28 +85,35 @@ class Profile(models.Model):
             return self.user.email
 
     def save(self, *args, **kwargs):
-        # delete old file when replacing by updating the file
+        # delete old image when replacing image by updating the profile
         try:
             this = Profile.objects.get(id=self.id)
             if this.image != self.image:
                 this.image.delete(save=False)
-        except: pass # when new photo then we do nothing, normal case          
+        except Exception as e: pass         
         super(Profile, self).save(*args, **kwargs)
-
 
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, created, **kwargs):
+    """
+    A signal for creating user profile when user registered successfully.
+    """
     if created:
         Profile.objects.create(user=instance)
 
 @receiver(pre_delete, sender=Profile)
 def image_delete_handler(sender, instance, *args, **kwargs):
+    """
+    A signal for deleting profile image file from media files when a user profile delete
+    """
     if instance.image and instance.image.url:
         instance.image.delete()
 
-# Grantin permission to author users, disgranting for non-authors:
 @receiver(post_save, sender=Profile)
 def save_profile(sender, instance, created, **kwargs):
+    """
+    A signal for granting authorship permission to user based on is_author field in profile.
+    """
     if instance.is_author:
         permissions = list() 
         permissions.append(Permission.objects.get(name='Can add post'))

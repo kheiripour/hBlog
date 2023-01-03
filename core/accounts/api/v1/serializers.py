@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from ...models import User, Profile
 from django.contrib.auth.password_validation import (
     validate_password,
 )
@@ -11,9 +10,12 @@ from rest_framework_simplejwt.serializers import (
     api_settings,
     update_last_login,
 )
-
+from ...models import User, Profile
 
 class RegistrationSerializer(serializers.ModelSerializer):
+    """
+    Serializing  email and passwords and creating new user.
+    """
     password1 = serializers.CharField(max_length=250, write_only=True)
 
     class Meta:
@@ -23,21 +25,22 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if attrs.get("password") != attrs.get("password1"):
             raise serializers.ValidationError(
-                {"detail": "password doesnt match"}
+                {"detail": "password doesn't match"}
             )
         try:
             validate_password(attrs.get("password"))
         except exceptions.ValidationError as er:
             raise serializers.ValidationError({"password": er.messages})
-
         return super().validate(attrs)
 
     def create(self, validated_data):
         validated_data.pop("password1", None)
         return User.objects.create_user(**validated_data)
 
-
 class ConfirmResendSerializer(serializers.Serializer):
+    """
+    Serializing  date for resending activation email.
+    """
     email = serializers.EmailField(required=True)
 
     def validate(self, attrs):
@@ -56,8 +59,10 @@ class ConfirmResendSerializer(serializers.Serializer):
         attrs["user"] = user
         return super().validate(attrs)
 
-
 class ChangePasswordSerializer(serializers.Serializer):
+    """
+    Validate and serialize passwords for password change. 
+    """
     oldpassword = serializers.CharField(required=True, max_length=250)
     newpassword1 = serializers.CharField(required=True, max_length=250)
     newpassword2 = serializers.CharField(required=True, max_length=250)
@@ -73,8 +78,10 @@ class ChangePasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError({"new password": er.messages})
         return super().validate(attrs)
 
-
 class CustomAuthTokenSerializer(serializers.Serializer):
+    """
+    Validate and serialize email and password and then login.
+    """
     email = serializers.EmailField(label=_("email"), write_only=True)
     password = serializers.CharField(
         label=_("Password"),
@@ -106,8 +113,10 @@ class CustomAuthTokenSerializer(serializers.Serializer):
         attrs["user"] = user
         return attrs
 
-
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """
+    Generating jwt for auth and return it as string.
+    """
     def validate(self, attrs):
         data = super().validate(attrs)
         if not self.user.is_verified:
@@ -122,8 +131,10 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             update_last_login(None, self.user)
         return data
 
-
 class PasswordResetSerializer(serializers.Serializer):
+    """
+    Validator of user existence to send reset password link
+    """
     email = serializers.EmailField(required=True)
 
     def validate(self, attrs):
@@ -137,15 +148,17 @@ class PasswordResetSerializer(serializers.Serializer):
         attrs["user"] = user
         return super().validate(attrs)
 
-
 class PasswordResetConfirmSerializer(serializers.Serializer):
+    """
+    Validating new passwords to reset password.
+    """
     newpassword1 = serializers.CharField(required=True, max_length=250)
     newpassword2 = serializers.CharField(required=True, max_length=250)
 
     def validate(self, attrs):
         if attrs.get("newpassword1") != attrs.get("newpassword2"):
             raise serializers.ValidationError(
-                {"detail": "password doesnt match"}
+                {"detail": "password doesn't match"}
             )
         try:
             validate_password(attrs.get("newpassword1"))
@@ -154,6 +167,10 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
         return super().validate(attrs)
 
 class ProfileSerializer(serializers.ModelSerializer):
+    """
+    Serializer of profile data for getting and updating. 
+    It also provide absolute url of single profiles.
+    """
     absolute_url = serializers.SerializerMethodField()
     class Meta:
         model = Profile

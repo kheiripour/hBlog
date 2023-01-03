@@ -1,8 +1,7 @@
 from django.urls import path, include
 from django.urls import reverse_lazy
-from .views import SignUpView, LoginView, ProfileView ,EmailSent,ConfirmActivation,ForgetPassword,ResetPassword
-from django.views.generic import TemplateView
 from django.contrib.auth.views import LogoutView
+from .views import SignUpView, LoginView, ProfileView ,EmailSent,ConfirmActivation,ForgetPassword,ResetPassword
 
 app_name = "accounts"
 
@@ -19,7 +18,5 @@ urlpatterns = [
         name="logout",
     ),
     path("profile/", ProfileView.as_view(), name="profile"),
-
     path("api/v1/", include("accounts.api.v1.urls")),
-    # path('', include('django.contrib.auth.urls')),
 ]

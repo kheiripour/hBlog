@@ -3,7 +3,6 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from accounts.models import User
 
-
 @pytest.fixture
 def fakeuser1(): 
     user = User.objects.create_user(

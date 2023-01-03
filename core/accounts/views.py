@@ -10,16 +10,20 @@ import jwt
 from jwt import ExpiredSignatureError, InvalidSignatureError
 from mail_templated import EmailMessage
 from django.contrib import messages
-from website.utils import EmailThread
+from django.contrib.sites.models import Site
 from core.settings import SECRET_KEY
+from website.utils import EmailThread
 from .forms import UserRegisterForm,ForgetPasswordForm,RestPasswordForm
 from .models import Profile,User
 
 def send_activation_code(request,user):
+    """
+    Send user activation code to user email, will reuse in some classes so written as public function. 
+    """
     refresh = RefreshToken.for_user(user)
     token = str(refresh.access_token)
     scheme = request.scheme
-    host = request.META["HTTP_HOST"]
+    host = Site.objects.get_current().domain
     email_obj = EmailMessage(
             "email/activation.html",
             {
@@ -32,21 +36,23 @@ def send_activation_code(request,user):
             to=[user.email],
         )
     EmailThread(email_obj).start()
-
 class SignUpView(CreateView):
     template_name = "accounts/register.html"
     form_class = UserRegisterForm
     success_url = reverse_lazy('accounts:email-sent')
 
     def form_valid(self, form):
+        # When user registration form is valid, will try to send activation code to verify its real email.
         form.save()
         email = form.cleaned_data.get('email')
         user = User.objects.get(email=email)
         send_activation_code(self.request,user)
         self.request.session['email'] = email
         return super().form_valid(form)
-
 class EmailSent(TemplateView):
+    """
+    This view is for confirming message shown to user that an email sent for it.
+    """
     template_name = 'accounts/email-sent.html'
     
     def get_context_data(self, **kwargs):
@@ -54,6 +60,9 @@ class EmailSent(TemplateView):
         context['email'] = self.request.session.get('email')
         return context
 class ConfirmActivation(TemplateView):
+    """
+    When user request activation by getting confirm url, this view validate its JWT and response to it.
+    """
     template_name = 'accounts/activation-confirm.html'
     
     def get_context_data(self, **kwargs):
@@ -79,6 +88,11 @@ class ConfirmActivation(TemplateView):
         return context
 
 class LoginView(BaseLoginView):
+    """
+    If user is verified and credentials is true will login
+    If its first time login will redirect to profile page.
+    IF not verified, a new activation link will send.
+    """
     template_name = "accounts/login.html"
     fields = ["email", "password","remember"]
     
@@ -99,16 +113,20 @@ class LoginView(BaseLoginView):
             return self.form_invalid(form)
 
 class ForgetPassword(FormView):
+    """
+    A form simply give user email to send reset password link,
+    If user exist then a link sent, otherwise an error raise to user.
+    """
     template_name = "accounts/forget_password.html"
     form_class = ForgetPasswordForm
-    success_url = reverse_lazy('accounts:email-sent') #change ittttt
+    success_url = reverse_lazy('accounts:email-sent')
 
     def form_valid(self, form):
         user = User.objects.get(email = form.data.get('email'))
         refresh = RefreshToken.for_user(user)
         token = str(refresh.access_token)
         scheme = self.request.scheme
-        host = self.request.META["HTTP_HOST"]
+        host = Site.objects.get_current().domain
         email_obj = EmailMessage(
                 "email/reset_password.html",
                 {
@@ -128,7 +146,11 @@ class ForgetPassword(FormView):
         form.add_error(field='email',error="This user not exist")
         return super().form_invalid(form)
 
-class ResetPassword(FormView):  
+class ResetPassword(FormView):
+    """
+    After getting resetpassword url user will come to this page to
+    give new password. If two passwords validated successfully password will change.
+    """
     template_name =  'accounts/reset_password.html'
     form_class = RestPasswordForm
     success_url = reverse_lazy('accounts:login')
@@ -146,7 +168,7 @@ class ResetPassword(FormView):
             form.add_error(field=None,error= 'Token is invalid')
             return super().form_invalid(form) 
         except:
-            form.add_error(field=None,error= 'There is somethins wrong')
+            form.add_error(field=None,error= 'There is something wrong')
             return super().form_invalid(form) 
         else:
             user.set_password(form.data.get('password1'))
@@ -155,9 +177,10 @@ class ResetPassword(FormView):
                                     'Password changed successfully!')
             return super().form_valid(form)
 
-
-
-class ProfileView(LoginRequiredMixin, UpdateView):   
+class ProfileView(LoginRequiredMixin, UpdateView):
+    """
+    Retrieve and update profile using this page
+    """
     template_name = "accounts/profile.html"
     model = Profile
     fields = ['first_name','last_name','about','address','phone_number','image']
@@ -171,10 +194,3 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         profile.is_complete = True
         profile.save()
         return super().post(request, *args, **kwargs)
-        
-
-      
-
-
-    
-

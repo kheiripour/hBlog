@@ -178,8 +178,11 @@ COMPRESS_ROOT = STATIC_ROOT
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Site configs
-SITE_ID = 3
-
+if DEBUG == True:
+    SITE_ID = 2
+else:
+    SITE_ID = 3
+    
 # robots
 ROBOTS_USE_SITEMAP = True
 ROBOTS_USE_HOST = True
