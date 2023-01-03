@@ -8,6 +8,10 @@ from blog.models import Post
 
 @shared_task
 def send_new_posts():
+    """
+    This is task will send newsletter mail for subscribed users.
+    It will run every night and contains news posts that had been published each day. 
+    """
     posts = Post.objects.filter(status=True,pub_date__date=date.today())
     if posts:
         http = 'http://'

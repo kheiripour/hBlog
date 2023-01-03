@@ -2,13 +2,14 @@ from django.core.management.base import BaseCommand
 from datetime import date
 from django.contrib.sites.models import Site
 from mail_templated import EmailMessage
+from blog.models import Post
 from ...utils import EmailThread 
 from ...models import Newsletter
-from blog.models import Post, PostVersion, Category
-
 
 class Command(BaseCommand):
-
+    """
+    Manually can run this command to email newsletter.
+    """
     def handle(self, *args, **options):
         posts = Post.objects.filter(status=True,pub_date__date=date.today())
         if posts:
@@ -30,7 +31,4 @@ class Command(BaseCommand):
             
             self.stdout.write(self.style.SUCCESS('Successfully %i posts emailed to %i users.... :)'%(len(posts),len(users)) ))
         else:
-            self.stdout.write(self.style.ERROR('There is no new posts to mail !' ))       
-            
-            
-         
+            self.stdout.write(self.style.ERROR('There is no new posts to mail!' ))       

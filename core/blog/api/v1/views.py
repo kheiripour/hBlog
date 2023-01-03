@@ -7,30 +7,44 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from datetime import datetime
 from .permissions import IsAuthor
-from .serializers import *
+from .serializers import (CommentSerializer, BlogModelSerializer, PostVersionSerializer)
 from .paginations import BlogPagination
-from ...models import Post,PostVersion, Comment
+from ...models import Post, PostVersion, Comment
 
 class BlogModelViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    A public viewset that gives all approved and published posts with card infos.
+    Can be filtered by author, category and search request in content field.
+    Commenting to post handled by an action. 
+    """
     permission_classes = [AllowAny]
-    queryset = Post.objects.filter(status=True)
+    queryset = Post.objects.filter(status=True, pub_date__lte=datetime.now())
     filter_backends = [DjangoFilterBackend,SearchFilter]
     filterset_fields = ['author','active_version__category']
     search_fields = ['active_version__content']
     pagination_class = BlogPagination
+
+    # Overridden because of POST method of comment submit action. In comment case serializer must be CommentSerializer.
     def get_serializer_class(self):  
         if self.request.method == 'POST':  
             return CommentSerializer
         else:
             return BlogModelSerializer
 
+    # Caching system to have better performance.60 secs for post list.
     @method_decorator(cache_page(60))
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
     @action(detail=True, methods=['post'])
     def send_comment(self, request, pk=None):
+        """
+        This action handle comment like normal template base of app.
+        If user authenticated the name and email will be his profile name and email.
+        Otherwise name and email will be given by api request.
+        """
         post = self.get_object()
         serializer = self.get_serializer_class()(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -55,8 +69,12 @@ class BlogModelViewSet(viewsets.ReadOnlyModelViewSet):
         )
         return Response({'details':'comment sent successfully.'},status=status.HTTP_201_CREATED)
 
-
 class AuthorModelViewSet(viewsets.ReadOnlyModelViewSet,mixins.CreateModelMixin):
+    """
+    A restricted viewset for author users to view list of their posts, creating new posts and
+    making change request for their existing posts. Change request handled by an action.
+    It can be filtered like BlogModelViewSet.
+    """
     permission_classes = [IsAuthor]
     serializer_class = BlogModelSerializer
     filter_backends = [DjangoFilterBackend,SearchFilter]
@@ -64,15 +82,21 @@ class AuthorModelViewSet(viewsets.ReadOnlyModelViewSet,mixins.CreateModelMixin):
     search_fields = ['active_version__content']
     pagination_class = BlogPagination
 
+    # If user request a post editing api that isn't it's author will receive an 404 error.
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user.profile)
 
-    def get_serializer_class(self):  
+    def get_serializer_class(self): 
+        """
+        If method is POST its a post version creation request so serializer should be PostVersionSerializer,
+        otherwise its just getting list of posts so the serializer should be BlogModelSerializer.
+        """ 
         if self.request.method == 'POST':  
             return PostVersionSerializer
         else:
             return BlogModelSerializer
 
+    # In case of post creation firs a post create and then post version that will be the post active version.
     def create(self, request, *args, **kwargs):
         post = Post.objects.create(author=request.user.profile)
         serializer = self.get_serializer_class()(data=request.data)
@@ -87,6 +111,10 @@ class AuthorModelViewSet(viewsets.ReadOnlyModelViewSet,mixins.CreateModelMixin):
            
     @action(detail=True, methods=['get','post'])
     def change_request(self, request, pk=None):
+        """
+        This action support 2 methods. 'get' for getting all versions of a post and
+        'post' method for creating change request. 
+        """
         post = self.get_object()
         post_versions = PostVersion.objects.filter(post=post).order_by('-number')
         if request.method == 'GET':        

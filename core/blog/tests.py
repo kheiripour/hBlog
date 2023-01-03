@@ -108,7 +108,7 @@ class TestBlogApi:
         response = api_client.post(url,data)
         assert response.status_code == 201    
 
-        # get list of my posts:
+    # get list of my posts:
     def test_get_my_posts_response_200_status(self,api_client,fakeuser1):
         api_client.force_authenticate(user=fakeuser1)
         url = reverse('blog:api-v1:author-list')

@@ -2,7 +2,6 @@ from django.urls import path, include
 from .feeds import LatestEntriesFeed
 from .views import BlogList,BlogDetail,BlogAuthorList,BlogAuthor
 
-
 app_name = "blog"
 
 urlpatterns = [
@@ -15,6 +14,5 @@ urlpatterns = [
     path('author/<int:pk>/',BlogAuthor.as_view(),name='blog-edit'),
     path('latest/feed/', LatestEntriesFeed()),
     path('api/v1/',include('blog.api.v1.urls')),
-
 ]
    
