@@ -1,0 +1,57 @@
+{% extends "base_blog.html" %}
+{% load static %}
+{% block title %} {{title}} {% endblock %}
+
+{% block content %}
+<!-- breadcumb-area start -->
+{% if result_title %}
+<div class="breadcumb-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcumb-wrap text-center">
+                    <ul>
+                        <li class=" h5 ">{{result_title}}</li>
+                        <li>:</li>
+                        <li class=" h5 active">{{result_value}}</li>
+                        <li class=" h5 active">({{count}})</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+<!-- breadcumb-area end -->
+<!-- blog-area start -->
+<div class="container">
+    <div class="row py-2">
+        {% for post in posts %}
+        <div class="col-lg-4 mb-3 d-flex align-items-stretch">
+            <div class="blog-wrap align-items-stretch">
+                {% include 'blog/blog-card.html' %}
+                {% if title == "MyPosts" %}
+
+                <div class="blog-operations text-center">
+                    <b class="float-start">Status: {%if post.status %} <i class="fa-solid fa-badge-check fa-lg"></i> {%else%} <i class="fa-solid fa-octagon-xmark"></i>{% endif%}V:{{post.active_version.number}} </b>
+                    {% if post.pend %} <b class="text-danger text-center">
+                        {%if post.admin_checked%}
+                        V:{{ post.lastversion.number }} not approved!
+                        {%else%}
+                        V:{{ post.lastversion.number }} is waiting for admin check. {% endif %}</b> {% endif %}
+                    <a href="{% url 'blog:blog-edit' pk=post.id %}" class="btn btn-success float-end"><i
+                            class="fa-solid fa-pen-to-square"></i></a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        {% if page_obj.paginator.num_pages > 1 %}
+        <div class="col-12">
+            {% include 'blog/blog-pagination.html' %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+<!-- blog-area end -->
+{% endblock %}

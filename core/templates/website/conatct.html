@@ -1,0 +1,89 @@
+{% extends "base_blog.html" %}
+{% load static %}
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="contact-form">
+
+                <form action="{% url 'website:contact' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        {% if not request.user.is_authenticated %}
+                        <div class="col-md-6 col-sm-6 col-12">
+                            <input type="text" class="border" placeholder="Name" id="fname" name="name" required>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-12">
+                            <input type="email" class="border" placeholder="Email" id="email" name="email" required>
+                        </div>
+                        {% endif %}
+                        <div class="col-12">
+                            <input type="text" class="border" placeholder="Subject" id="subject" name="subject"
+                                required>
+                        </div>
+                        <div class="col-sm-12">
+                            <textarea class="contact-textarea border" placeholder="Message" id="msg" name="message"
+                                required></textarea>
+                        </div>
+
+                        <div class="col-1">
+                            {{form.captcha}}
+                        </div>
+                        
+
+                        <div class="col-12 text-center">
+                            <button id="submit" class="cont-submit btn-contact" name="submit">SEND MESSAGE</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if form.errors %}
+        <div class="alert alert-error">
+            <h6>Please fix the following errors</h6>
+            {% for field in form %}
+            {% if field.errors %}
+            {% for error in field.errors %}
+            <p class="alert alert-danger">{{ field.name|capfirst }}: {{ error }}</p>
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+            {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+            <p class="alert alert-danger">{{error}}</p>
+            {% endfor %}
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% endblock %}
+
+        {% block script %}
+        <script>
+            $(function () {
+                // Add refresh button after field (this can be done in the template as well)
+                $('img.captcha').after(
+                    $('<a href="#void" class="captcha-refresh p-2"><i class="fa fa-refresh" ></i></a>')
+                );
+
+                // Click-handler for the refresh-link
+                $('.captcha-refresh').click(function () {
+                    var $form = $(this).parents('form');
+                    var url = location.protocol + "//" + window.location.hostname + ":"
+                        + location.port + "/captcha/refresh/";
+
+                    // Make the AJAX-call
+                    $.getJSON(url, {}, function (json) {
+                        $form.find('input[name="captcha_0"]').val(json.key);
+                        $form.find('img.captcha').attr('src', json.image_url);
+                    });
+
+                    return false;
+                });
+            });
+        </script>
+        {% endblock %}

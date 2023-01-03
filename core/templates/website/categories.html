@@ -1,0 +1,9 @@
+
+    <ul>
+        {% for cat, count in cats.items %}
+        <li >
+            <a href="{% url 'blog:blog-category' cat_id=cat.id  %}"><b>{{cat}}({{count}})</b></a>
+            <span ></span>
+        </li>
+        {% endfor %}
+    </ul>

@@ -1,0 +1,24 @@
+{% extends "mail_templated/base.tpl" %}
+
+{% block subject %}
+Newsletter
+{% endblock %}
+
+{% block body %}
+ 
+{% endblock %}
+
+{% block html %}
+<h1>This message is from hBlog App </h1>
+<br>
+<p>Hey dud, we have {% if posts.count > 1 %} some news posts {% else %} a new post {% endif %} on our site. here you are:</p>
+<br>
+{% for post in posts %}
+<b><a href="{{post.full_url}}">{{post.title}}</a></b>
+<br>
+<br>
+{%endfor%}
+<br>
+<p>we will be happy if you wish to come ;)</p>
+
+{% endblock %}

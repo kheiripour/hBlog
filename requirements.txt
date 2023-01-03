@@ -2,33 +2,36 @@
 django >3.2,<3.3
 python-decouple
 Pillow
-# djangorestframework
+djangorestframework
+django-summernote
+django-simple-captcha
+crispy-bootstrap5
 
 # Third party modules:
-# markdown       
-# django-filter  
+markdown       
+django-filter  
 drf-yasg[validation]
 
 # Deployment modules:
-# djangorestframework-simplejwt
-# gunicorn
+djangorestframework-simplejwt
+gunicorn
+django-robots
+django_compressor
 
 # email
-# django-mail-templated
+django-mail-templated
 
 # reformatting
-# black
-# flake8
-# autopep8 # to use by vs code auto formater on save
-# pytest
-# pytest-django
-# Faker
+black
+flake8
+pytest-django
+Faker
 
 # background proccess and cache
-# celery
-# redis
-# django-celery-beat
-# django-redis
+celery
+redis
+django-celery-beat
+django-redis
 
 # database
-# psycopg2-binary
+psycopg2-binary

@@ -1,0 +1,36 @@
+{% load static %}
+
+<div class="col-lg-12 col-md-6 col-12">
+    <div class="booking-wrap2">
+        <div class="booking-img2">
+            <img src="{% static 'img/booking2.jpg' %}" alt="">
+        </div>
+        <div class="booking-form">
+            <form action="{% url 'website:index' %}" method="post">
+                {% csrf_token %}
+                <h2>Get Breaking News delivered to your inbox.</h2>
+                <input type="email" name="email" placeholder="Email here..." required>
+
+                <button type="submit">Subscribe now</button>
+                {% if form.errors %}
+                <div class="alert alert-error">
+                    <h6>Please fix the following errors</h6>
+                    {% for field in form %}
+                    {% if field.errors %}
+                    {% for error in field.errors %}
+                    <p class="alert alert-danger">{{ field.name|capfirst }}: {{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+                    {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                    <p class="alert alert-danger">{{error}}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                {% endif %}
+            </form>
+
+        </div>
+    </div>
+</div>

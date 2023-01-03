@@ -1,0 +1,29 @@
+{% load static %}
+{% load blog_tags %}
+
+<div class="pagination-wrapper text-center mb-30">
+    <ul class="page-numbers">
+
+        {% queries request as uq %}
+
+        <li><a class="prev page-numbers" href="?{{uq}}page=1"><i class="fa fa-angle-double-left"></i></a>
+        </li>
+        <li><a class="prev page-numbers"
+                href="?{{uq}}page={% if page_obj.has_previous %}{{page_obj.previous_page_number}}{% else %}{{page_obj.number}}{% endif %}"><i
+                    class="fa fa-arrow-left"></i></a></li>
+
+        {% for p in page_obj.paginator.page_range %}
+        {% if page_obj.number == p %}
+        <li><span class="page-numbers current">{{p}}</span></li>
+        {% elif p <= page_obj.number|add:2 and p >= page_obj.number|add:-2 %}
+            <li><a class="page-numbers" href="?{{uq}}page={{p}}">{{p}}</a></li>
+            {% endif %}
+            {% endfor %}
+
+            <li><a class="next page-numbers"
+                    href="?{{uq}}page={% if page_obj.has_next %}{{page_obj.next_page_number}}{% else %}{{page_obj.number}}{% endif %}"><i
+                        class="fa fa-arrow-right"></i></a></li>
+            <li><a class="prev page-numbers" href="?{{uq}}page={{page_obj.paginator.num_pages}}"><i
+                        class="fa fa-angle-double-right"></i></a></li>
+    </ul>
+</div>

@@ -1,0 +1,108 @@
+{% extends "base_blog.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %} {{title}} {% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="col-md-12 col-md-offset-2">
+        <h1 class="text-center">{{title}}</h1>
+        {% if admin_note %}
+        <div class="form-group mb-2">
+            <p class="admin-note">Admin Note:</p>
+            <textarea class="form-control" disabled>{{admin_note}}</textarea>
+        </div>
+        {% endif %}
+        {% if pre_author_note %}
+        <div class="form-group mb-2">
+            <p >Previous Author Note:</p>
+            <textarea class="form-control"  disabled>{{pre_author_note}} </textarea>
+        </div>
+        {% endif %}
+        <div class="blog-images text-center ">
+            <img class="post-image clickable" onclick="document.getElementById('imgInp').click()"
+                src="{% if post.image %} {{ post.image.url }} {% else %} {% static 'default-post.jpg' %} {% endif %} "
+                alt="" id="postimg">
+        </div>
+
+        <form action=" 
+            {% if title == 'Create New Post' %}
+            {% url 'blog:blog-create' %}
+            {% else %}
+            {% url 'blog:blog-edit' pk=post.id %}
+            {% endif %}
+            " method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input name="image" accept="image/*" type='file' id="imgInp" hidden>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-9">
+                        {{form.title|as_crispy_field}}
+                    </div>
+                    <div class="col-3 text-center">
+                        {{form.category|as_crispy_field}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+
+                {{form.snippet|as_crispy_field}}
+            </div>
+
+            <div class="form-group">
+
+                {{form.content|as_crispy_field}}
+            </div>
+
+            <hr class="bold">
+            <div class="form-group mb-2">
+                <p >*Author Note:</p>
+                <textarea class="form-control" name="author_note" required>{{author_note}}</textarea>
+            </div>
+
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary mb-2">
+                    {% if title == 'Create New Post' %}
+                    Create
+                    {% else %}
+                    Send Change Request
+                    {% endif %}
+                </button>
+
+            </div>
+        </form>
+    </div>
+
+</div>
+
+    {% if form.errors %}
+    <div class="alert alert-error">
+        <h6>Please fix the following errors</h6>
+        {% for field in form %}
+        {% if field.errors %}
+        {% for error in field.errors %}
+        <p class="alert alert-danger">{{ field.name|capfirst }}: {{ error }}</p>
+        {% endfor %}
+        {% endif %}
+        {% endfor %}
+        {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+        <p class="alert alert-danger">{{error}}</p>
+        {% endfor %}
+        {% endif %}
+    </div>
+    {% endif %}
+    
+{% endblock %}
+
+{% block script %}
+    <script>
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files
+            if (file) {
+                postimg.src = URL.createObjectURL(file)
+            }
+        }
+    </script>
+{% endblock %}

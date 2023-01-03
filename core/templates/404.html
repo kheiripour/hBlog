@@ -1,0 +1,23 @@
+{% extends "base_blog.html" %}
+{% load static %}
+{% block content %}
+<!-- error-page start -->
+<div class="error-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 col-12">
+                <div class="error-wrap">
+                    <h1 class="display-1 page-not-found">404</h1>
+                    <p></p>
+                    <h3>Page Not Found</h3>
+                    <p>Maybe you are looking for incorrect page address in our site!</p>
+                    <p>If you think you shuold access something here please tell us.</p>
+                    <a href="{% url 'website:index' %}">Go back to home</a>
+                    <a href="{% url 'website:contact' %}">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- error-page end -->
+{% endblock %}
