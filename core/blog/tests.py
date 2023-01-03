@@ -123,7 +123,7 @@ class TestBlogApi:
         assert response.status_code == 200
 
     # change request send (creating new post_version)
-    def test_change_request_send_201_status(self, api_client, fakepost, fakeuser1):
+    def test_change_request_send_201_status(self, api_client, fakepost, fakeuser1, fakecats):
         post = fakepost
         api_client.force_authenticate(user=fakeuser1)
         url = reverse("blog:api-v1:author-change-request", kwargs={"pk": post.id})
@@ -132,7 +132,7 @@ class TestBlogApi:
             "title": "new title",
             "content": "<p>new content </p> ",
             "snippet": "new snippet",
-            "category": [1, 2],
+            "category": [fakecats[0].id, fakecats[1].id],
             "image": "",
             "author_note": "test note",
         }
@@ -151,7 +151,7 @@ class TestBlogApi:
 
     # prevent non-author user to send change request of a post
     def test_non_author_change_request_send_404_status(
-        self, api_client, fakepost, fakeuser2
+        self, api_client, fakepost, fakeuser2, fakecats
     ):
         post = fakepost
         api_client.force_authenticate(user=fakeuser2)
@@ -161,7 +161,7 @@ class TestBlogApi:
             "title": "new title",
             "content": "<p>new content </p> ",
             "snippet": "new snippet",
-            "category": [1, 2],
+            "category": [fakecats[0].id, fakecats[1].id],
             "image": "",
             "author_note": "test note",
         }
