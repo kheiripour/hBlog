@@ -38,3 +38,7 @@ jobs:
   #         docker-compose -f docker-compose-stage.yml stop
   #         git pull
   #         docker-compose -f docker-compose-stage.yml restart
+  #         docker-compose exec backend sh -c "python manage.py collectstatic"
+  #         docker-compose exec backend sh -c "python manage.py makemigrations"
+  #         docker-compose exec backend sh -c "python manage.py migrate"
+

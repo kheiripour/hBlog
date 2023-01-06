@@ -6,13 +6,9 @@ from django.contrib import messages
 from .models import Slider, Contact, Newsletter
 from .forms import ContactForm
 
-# Create your views here.
-
-
 def handler404_view(request, exception):
     response = render(request=request, template_name="404.html", status=404)
     return response
-
 
 class IndexView(CreateView):
     template_name = "website/index.html"

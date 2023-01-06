@@ -67,7 +67,6 @@ class EmailSent(TemplateView):
         context["email"] = self.request.session.get("email")
         return context
 
-
 class ConfirmActivation(TemplateView):
     """
     When user request activation by getting confirm url, this view validate its JWT and response to it.
