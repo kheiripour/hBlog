@@ -1,5 +1,7 @@
 {% extends "base_account.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
 {% block title %} Login {% endblock %}
 {% block extracss %}
 <link href="https://getbootstrap.com/docs/5.1/examples/sign-in/signin.css" rel="stylesheet">
@@ -8,26 +10,12 @@
 {% block content %}
 
 <main class="form-signin text-center">
-      <!-- start message Area -->
-      {% include 'message.html' %} 
-      <!-- end message Area -->
   
   <h2 class="my-3">WELCOME</h2>
   
-  <form action="{% url 'accounts:login' %}" method="POST">
+  <form id="loing-form"  method="POST" novalidate>
     {% csrf_token %}
-    <!-- Email input -->
-    <div class="form-outline mb-4">
-      <label class="form-label" for="form2Example1">Email address</label>
-      <input type="email" name="username" id="form2Example1" class="form-control" placeholder="john.smith@example.com" />
-    </div>
-    <!-- Password input -->
-    <div class="form-outline mb-4">
-      <label class="form-label" for="form2Example2">Password</label>
-      <input type="password" name="password" id="form2Example2" class="form-control"placeholder="password" />
-
-    </div>
-
+    {{ form | crispy }}
     <!-- 2 column grid layout for inline styling -->
     <div class="row mb-4">
       <div class="col d-flex justify-content-center">
@@ -50,23 +38,7 @@
     <p>Continue anonymous <a href="/">Home</a></p>
   </div>
 
-  {% if form.errors %}
-  <div class="alert alert-error">
-    <h6>Please fix the following errors</h6>
-    {% for field in form %}
-    {% if field.errors %}
-    {% for error in field.errors %}
-    <p class="alert alert-danger">{{ field.name|capfirst }}: {{ error }}</p>
-    {% endfor %}
-    {% endif %}
-    {% endfor %}
-    {% if form.non_field_errors %}
-    {% for error in form.non_field_errors %}
-    <p class="alert alert-danger">{{error}}</p>
-    {% endfor %}
-    {% endif %}
-  </div>
-  {% endif %}
+  
 </main>
 
 {% endblock %}

@@ -38,7 +38,7 @@
                                 class="form-control" value="{{ profile.last_name }}" placeholder="last name"></div>
                         <div class="col-md-4">
                             <label class="labels">Mobile Number</label>
-                            <input name="phone_number" type="text" class="form-control" placeholder="eg. +9891212345678"
+                            <input name="phone_number" type="tel" class="form-control" placeholder="eg. 091212345678" pattern="[0-9]{11}"
                                 value="{{ profile.phone_number }}">
                         </div>
                     </div>
