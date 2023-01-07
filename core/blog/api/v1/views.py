@@ -7,7 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from django.utils.timezone import now 
+from django.utils.timezone import now
 from .permissions import IsAuthor
 from .serializers import CommentSerializer, BlogModelSerializer, PostVersionSerializer
 from .paginations import BlogPagination

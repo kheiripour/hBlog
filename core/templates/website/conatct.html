@@ -1,7 +1,8 @@
 {% extends "base_blog.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
 {% block title %} {{ title }} {% endblock %}
-
 {% block content %}
 <div class="container">
     <div class="row">
@@ -13,25 +14,24 @@
                     <div class="row">
                         {% if not request.user.is_authenticated %}
                         <div class="col-md-6 col-sm-6 col-12">
-                            <input type="text" class="border" placeholder="Name" id="fname" name="name" required>
+                            {{form.name|as_crispy_field}}
                         </div>
                         <div class="col-md-6 col-sm-6 col-12">
-                            <input type="email" class="border" placeholder="Email" id="email" name="email" required>
+                            {{form.email|as_crispy_field}}
                         </div>
+                        {% else %}
+                        <input type="text" name="sender_id" value="{{request.user.profile.id}}" hidden>
                         {% endif %}
                         <div class="col-12">
-                            <input type="text" class="border" placeholder="Subject" id="subject" name="subject"
-                                required>
+                            {{form.subject|as_crispy_field}}
                         </div>
                         <div class="col-sm-12">
-                            <textarea class="contact-textarea border" placeholder="Message" id="msg" name="message"
-                                required></textarea>
+                            {{form.message|as_crispy_field}}
                         </div>
 
-                        <div class="col-1">
-                            {{form.captcha}}
+                        <div class="col-2 offset-md-5">
+                            {{form.captcha|as_crispy_field}}
                         </div>
-                        
 
                         <div class="col-12 text-center">
                             <button id="submit" class="cont-submit btn-contact" name="submit">SEND MESSAGE</button>
@@ -41,24 +41,6 @@
                 </form>
             </div>
         </div>
-
-        {% if form.errors %}
-        <div class="alert alert-error">
-            <h6>Please fix the following errors</h6>
-            {% for field in form %}
-            {% if field.errors %}
-            {% for error in field.errors %}
-            <p class="alert alert-danger">{{ field.name|capfirst }}: {{ error }}</p>
-            {% endfor %}
-            {% endif %}
-            {% endfor %}
-            {% if form.non_field_errors %}
-            {% for error in form.non_field_errors %}
-            <p class="alert alert-danger">{{error}}</p>
-            {% endfor %}
-            {% endif %}
-        </div>
-        {% endif %}
 
         {% endblock %}
 
@@ -81,7 +63,6 @@
                         $form.find('input[name="captcha_0"]').val(json.key);
                         $form.find('img.captcha').attr('src', json.image_url);
                     });
-
                     return false;
                 });
             });

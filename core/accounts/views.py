@@ -67,6 +67,7 @@ class EmailSent(TemplateView):
         context["email"] = self.request.session.get("email")
         return context
 
+
 class ConfirmActivation(TemplateView):
     """
     When user request activation by getting confirm url, this view validate its JWT and response to it.
@@ -95,6 +96,7 @@ class ConfirmActivation(TemplateView):
         except Exception as e:
             context["confirm_message"] = str(e)
         return context
+
 
 class LoginView(BaseLoginView):
     """
@@ -125,6 +127,7 @@ class LoginView(BaseLoginView):
                 error="Your User is not verified, an activation link sent to your email.",
             )
             return self.form_invalid(form)
+
 
 class ForgetPassword(FormView):
     """

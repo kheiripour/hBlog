@@ -4,6 +4,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from accounts.models import Profile
 
+
 class Category(models.Model):
     """
     Reference model for categories that are many-to-many field for post versions.
