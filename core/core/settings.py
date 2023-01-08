@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
 from pathlib import Path
 from decouple import config
 import os
@@ -180,7 +179,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 if DEBUG == True:
     SITE_ID = 2
 else:
-    SITE_ID = 3
+    SITE_ID = 5
 
 # robots
 ROBOTS_USE_SITEMAP = True
