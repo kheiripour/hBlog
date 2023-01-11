@@ -64,7 +64,7 @@ class Post(models.Model):
         return reverse("blog:blog-single", kwargs={"pk": self.id})
 
     class Meta:
-        ordering = ["-created_date"]
+        ordering = ["-pub_date"]
 
 
 class Comment(models.Model):
