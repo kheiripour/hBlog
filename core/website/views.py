@@ -1,12 +1,10 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.shortcuts import render
-from django.utils.timezone import now 
+from django.utils.timezone import now
 from django.contrib import messages
 from .models import Slider, Contact, Newsletter
 from .forms import ContactForm
-
-# Create your views here.
 
 
 def handler404_view(request, exception):
@@ -62,7 +60,6 @@ class ContactView(CreateView):
         return context
 
     def form_valid(self, form):
-
         if self.request.user.is_authenticated:
             form.instance.sender = self.request.user.profile
             form.instance.name = self.request.user.profile
@@ -76,3 +73,16 @@ class ContactView(CreateView):
             "Your message recieved successfully, Thank You.",
         )
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        for field in form:
+            if field.errors:
+                for er in field.errors:
+                    messages.add_message(
+                        self.request,
+                        messages.ERROR,
+                        "{}: {}".format(
+                            field.name.capitalize(), er.replace("This", "")
+                        ),
+                    )
+        return super().form_invalid(form)

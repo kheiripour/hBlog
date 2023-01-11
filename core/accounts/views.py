@@ -97,6 +97,7 @@ class ConfirmActivation(TemplateView):
             context["confirm_message"] = str(e)
         return context
 
+
 class LoginView(BaseLoginView):
     """
     If user is verified and credentials is true will login
@@ -126,6 +127,7 @@ class LoginView(BaseLoginView):
                 error="Your User is not verified, an activation link sent to your email.",
             )
             return self.form_invalid(form)
+
 
 class ForgetPassword(FormView):
     """

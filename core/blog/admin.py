@@ -31,7 +31,7 @@ class PostAdmin(admin.ModelAdmin):
         PostVersionInline,
         CommentInline,
     ]
-    
+
     # changing active version queryset to limit choice in post versions:
     def render_change_form(self, request, context, *args, **kwargs):
         context["adminform"].form.fields[

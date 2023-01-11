@@ -1,6 +1,6 @@
 from rest_framework import viewsets, mixins, permissions, status
 from rest_framework.response import Response
-from django.utils.timezone import now 
+from django.utils.timezone import now
 from .serializer import ContactSerializer, NewsletterSerializer, SliderSerializer
 from ...models import Slider
 

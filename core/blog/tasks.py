@@ -1,5 +1,5 @@
 from celery import shared_task
-from django.utils.timezone import now ,timedelta
+from django.utils.timezone import now, timedelta
 from django.contrib.sites.models import Site
 from mail_templated import EmailMessage
 from website.utils import EmailThread
@@ -13,7 +13,11 @@ def send_new_posts():
     This is task will send newsletter mail for subscribed users.
     It will run every night and contains news posts that had been published each day.
     """
-    posts = Post.objects.filter(status=True, pub_date__date__lte=now(), pub_date__date__gte=now()-timedelta(days=1))
+    posts = Post.objects.filter(
+        status=True,
+        pub_date__date__lte=now(),
+        pub_date__date__gte=now() - timedelta(days=1),
+    )
     if posts:
         http = "http://"
         domain = Site.objects.get_current().domain

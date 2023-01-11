@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.utils.timezone import now 
+from django.utils.timezone import now
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from .models import Post, PostVersion, Comment, Category

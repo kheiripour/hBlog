@@ -9,6 +9,23 @@ User = get_user_model()
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
+    password1 = forms.CharField(
+        max_length=100, label="Password", widget=forms.PasswordInput()
+    )
+    password2 = forms.CharField(
+        max_length=100, label="Confirm Password", widget=forms.PasswordInput()
+    )
+
+    class Meta:
+        model = User
+        fields = ["email"]
+
+
+class LoginForm(forms.ModelForm):
+    email = forms.EmailField()
+    password = forms.CharField(
+        max_length=100, label="Password", widget=forms.PasswordInput()
+    )
 
     class Meta:
         model = User

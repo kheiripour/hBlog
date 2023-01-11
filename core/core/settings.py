@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
 from pathlib import Path
 from decouple import config
 import os
@@ -26,6 +25,7 @@ SECRET_KEY = config("SECRET_KEY", default="test")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=True, cast=bool)
+
 
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
@@ -106,15 +106,15 @@ if DEBUG:
     }
 else:
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "postgres",
-            "USER": "postgres",
-            "PASSWORD": "postgres",
-            "HOST": "db",
-            "PORT": 5432,
+            "default": {
+                "ENGINE": "django.db.backends.postgresql",
+                "NAME": "postgres",
+                "USER": "postgres",
+                "PASSWORD": "postgres",
+                "HOST": "db",
+                "PORT": 5432,
+            }
         }
-    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -180,7 +180,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 if DEBUG == True:
     SITE_ID = 2
 else:
-    SITE_ID = 3
+    SITE_ID = 5
 
 # robots
 ROBOTS_USE_SITEMAP = True

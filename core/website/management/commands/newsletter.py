@@ -13,7 +13,11 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        posts = Post.objects.filter(status=True, pub_date__date__lte=now(), pub_date__gte=now()-timedelta(days=1))
+        posts = Post.objects.filter(
+            status=True,
+            pub_date__date__lte=now(),
+            pub_date__gte=now() - timedelta(days=1),
+        )
         if posts:
             http = "http://"
             domain = Site.objects.get_current().domain

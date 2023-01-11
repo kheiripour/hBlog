@@ -1,5 +1,16 @@
 from django.urls import path
-from .views import (ProfileModelViewSet, ConfirmActivationResend, ConfirmActivation, RegistrationApiView, ChangePasswordView, CustomObtainAuthToken, CustomDiscardAuthToken, CustomTokenObtainPairView, ResetPasswordView, ResetPasswordConfirmView)
+from .views import (
+    ProfileModelViewSet,
+    ConfirmActivationResend,
+    ConfirmActivation,
+    RegistrationApiView,
+    ChangePasswordView,
+    CustomObtainAuthToken,
+    CustomDiscardAuthToken,
+    CustomTokenObtainPairView,
+    ResetPasswordView,
+    ResetPasswordConfirmView,
+)
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,

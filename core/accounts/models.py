@@ -62,10 +62,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+
 class Profile(models.Model):
     """
     Profile model where personal information about user will store.
     """
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -91,9 +93,11 @@ class Profile(models.Model):
             this = Profile.objects.get(id=self.id)
             if this.image != self.image:
                 this.image.delete(save=False)
-        except Exception: 
-            pass         
-        super(Profile, self).save(*args, **kwargs) 
+        except Exception:
+            pass
+        super(Profile, self).save(*args, **kwargs)
+
+
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     """

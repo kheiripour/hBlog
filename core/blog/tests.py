@@ -2,8 +2,8 @@ import pytest
 from django.urls import reverse
 from rest_framework.test import APIClient
 from django.templatetags.static import static
-from django.utils.timezone import now ,timedelta
-from django.utils.timezone import timedelta,now
+from django.utils.timezone import now, timedelta
+from django.utils.timezone import timedelta, now
 from accounts.models import User
 from .models import Post, PostVersion, Category, Comment
 
@@ -36,9 +36,7 @@ def fakepost(fakeuser1, fakecats):
     user = fakeuser1
     cats = fakecats
     post = Post.objects.create(
-        author=user.profile,
-        status=True,
-        pub_date=now()-timedelta(days=1)
+        author=user.profile, status=True, pub_date=now() - timedelta(days=1)
     )
     post_version = PostVersion.objects.create(
         post=post,
@@ -123,7 +121,9 @@ class TestBlogApi:
         assert response.status_code == 200
 
     # change request send (creating new post_version)
-    def test_change_request_send_201_status(self, api_client, fakepost, fakeuser1, fakecats):
+    def test_change_request_send_201_status(
+        self, api_client, fakepost, fakeuser1, fakecats
+    ):
         post = fakepost
         api_client.force_authenticate(user=fakeuser1)
         url = reverse("blog:api-v1:author-change-request", kwargs={"pk": post.id})

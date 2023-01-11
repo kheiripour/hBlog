@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from faker import Faker
 from random import choice
 from os import listdir
+from django.utils.timezone import now
 from os.path import isfile, join
 from core import settings
 from accounts.models import Profile
@@ -35,6 +36,7 @@ class Command(BaseCommand):
             post = Post.objects.create(
                 author=choice(Profile.objects.all()),
                 status=True,
+                pub_date=now()
             )
             post_version = PostVersion.objects.create(
                 post=post,

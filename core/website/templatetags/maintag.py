@@ -10,9 +10,9 @@ def main_latest(count):
     """
     Provide latest active published posts giving count argument and order by descending pub_date
     """
-    posts = Post.objects.filter(status=True, pub_date__lte=now()).order_by(
-        "-pub_date"
-    )[:count]
+    posts = Post.objects.filter(status=True, pub_date__lte=now()).order_by("-pub_date")[
+        :count
+    ]
     for post in posts:
         post.title = post.active_version.title
         post.snippet = post.active_version.snippet
