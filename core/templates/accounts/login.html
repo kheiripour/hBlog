@@ -3,7 +3,9 @@
 {% load crispy_forms_tags %}
 {% load crispy_forms_filters %}
 {% block title %} Login {% endblock %}
-
+{% block extracss %}
+<link rel="stylesheet" href="{% static 'css/signin.css' %}">
+{% endblock %}
 {% block content %}
 
 <main class="form-signin text-center">
