@@ -50,16 +50,6 @@
                     </div>
 
 
-
-
-
-
-
-
-
-
-
-
                     <div class="comment-main">
                         <h3 class="blog-title">Comments<span> ({{ comments.count }})</span></h3>
                         <ol class="comments">
@@ -100,7 +90,7 @@
                                                         class="reply-form d-none"
                                                         id="comment-{{ forloop.counter }}-reply-form">
                                                         {% csrf_token %}
-                                                        <div class="col-4 form-group">
+                                                        <div class=" col-sm-8 form-group">
                                                             <input type="hidden" name="replied_to_id"
                                                                 value="{{comment.id}}">
 
@@ -176,7 +166,7 @@
                         <form method="POST" action="{% url 'blog:blog-single' pk=post.id %}" class="comment-form">
                             {% csrf_token %}
                             <div class="row align-items-center">
-                                <div class="col-6 form-group align-items-center">
+                                <div class="col-sm-8 form-group align-items-center">
 
                                     {% if not request.user.is_authenticated %}
 
