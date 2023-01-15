@@ -22,7 +22,8 @@ services:
       - DEBUG=True
     depends_on:
       - redis
-
+    restart: always
+    
   worker:
     build: .
     command: celery -A core worker --loglevel=info 

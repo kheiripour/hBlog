@@ -106,15 +106,15 @@ if DEBUG:
     }
 else:
     DATABASES = {
-            "default": {
-                "ENGINE": "django.db.backends.postgresql",
-                "NAME": "postgres",
-                "USER": "postgres",
-                "PASSWORD": "postgres",
-                "HOST": "db",
-                "PORT": 5432,
-            }
+        "default": {
+            "ENGINE": config("DB_ENGINE", default="django.db.backends.postgresql"),
+            "NAME": config("DB_NAME", default="postgres"),
+            "USER": config("DB_USER", default="postgres"),
+            "PASSWORD": config("DB_PASS", default="postgres"),
+            "HOST": config("DB_HOST", default="db"),
+            "PORT": config("DB_PORT", cast=int, default=5432),
         }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -177,10 +177,7 @@ COMPRESS_ROOT = STATIC_ROOT
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Site configs
-if DEBUG == True:
-    SITE_ID = 2
-else:
-    SITE_ID = 5
+SITE_ID = config("SITE_ID", cast=int, default=1)
 
 # robots
 ROBOTS_USE_SITEMAP = True
@@ -249,3 +246,53 @@ CAPTCHA_CHALLENGE_FUNCT = "captcha.helpers.math_challenge"
 # crispy configs:
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+
+# security configs for production
+if config("USE_SSL_CONFIG", cast=bool, default=False):
+    # Https settings
+    # SESSION_COOKIE_SECURE = True
+    # CSRF_COOKIE_SECURE = True
+    # SECURE_SSL_REDIRECT = True
+
+    # HSTS settings
+    # SECURE_HSTS_SECONDS = 31536000  # 1 year
+    # SECURE_HSTS_PRELOAD = True
+    # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+    # more security settings
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    #  SECURE_BROWSER_XSS_FILTER = True
+    # X_FRAME_OPTIONS = "SAMEORIGIN"
+    # SECURE_REFERRER_POLICY = "strict-origin"
+    # USE_X_FORWARDED_HOST = True
+    # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+
+    LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "simple": {
+            "format": "%(levelname)s %(asctime)s %(name)s.%(funcName)s:%(lineno)s- %(message)s"
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": "log.django",
+            "formatter": "simple",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", "file"],
+            "level": config("DJANGO_LOG_LEVEL", default="WARNING"),
+            "propagate": True,
+        },
+    },
+}

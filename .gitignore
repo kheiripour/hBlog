@@ -155,3 +155,12 @@ media/
 static/
 Backups/
 data/
+postgres_data/
+
+
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
+
+# ignore django logs
+log.django
