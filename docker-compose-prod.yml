@@ -1,0 +1,104 @@
+version: "3.9"
+   
+services:
+  redis:
+    container_name: redis
+    image: redis:6.2.7-alpine
+    restart: always
+    expose: 
+      - "6379"
+    command: redis-server --save 60 1 --loglevel warning
+
+  db:
+    image: postgres
+    container_name: db
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - envs/prod/db/.env
+    restart: always
+      
+  backend:
+    build: 
+      context: .
+      dockerfile: dockerfiles/prod/django/Dockerfile
+    container_name: backend
+    command: sh -c "python3 manage.py check_database && \
+                    python3 manage.py makemigrations --noinput && \
+                    python3 manage.py migrate --noinput && \
+                    python3 manage.py collectstatic --noinput && \
+                    gunicorn --bind 0.0.0.0:8000 core.wsgi:application"
+    volumes:
+      - ./core:/usr/src/app
+      - static_volume:/usr/src/app/static
+      - media_volume:/usr/src/app/media
+    expose:
+      - "8000"
+    env_file:
+      - ./envs/prod/django/.env
+    depends_on:
+      - db
+      - redis
+      
+  worker:
+    build:
+      context: .
+      dockerfile: dockerfiles/prod/django/Dockerfile
+    command: celery -A core worker --loglevel=info 
+    volumes:
+      - ./core:/usr/src/app
+    depends_on: 
+      - redis
+      - backend
+
+  beater:
+    build:
+      context: .
+      dockerfile: dockerfiles/prod/django/Dockerfile
+    command: celery -A core beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - ./core:/usr/src/app
+    depends_on: 
+      - redis
+      - backend
+
+  certbot:
+    build: 
+      context: ./dockerfiles/prod/certbot/
+    command: echo "Skipping..."
+    container_name: certbot
+    env_file:
+      - ./envs/prod/nginx/.env
+    volumes: 
+      - certbot_www_volume:/vol/www/
+      - certbot_certs_volume:/etc/letsencrypt/
+    depends_on:
+      - nginx
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./dockerfiles/prod/nginx/
+    restart: always
+    env_file:
+      - ./envs/prod/nginx/.env
+    ports:
+      - 443:443
+      - 80:80
+    volumes:
+      - static_volume:/home/app/static
+      - media_volume:/home/app/media
+      - certbot_www_volume:/vol/www/
+      - proxy_dhparams:/vol/proxy
+      - certbot_certs_volume:/etc/letsencrypt/
+
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+  certbot_www_volume:
+  certbot_certs_volume:
+  proxy_dhparams:
