@@ -43,7 +43,7 @@ services:
   worker:
     build:
       context: .
-      dockerfile: dockerfiles/stage/django/Dockerfile
+      dockerfile: dockerfiles/prod/django/Dockerfile
     command: celery -A core worker --loglevel=info 
     volumes:
       - ./core:/usr/src/app
@@ -54,7 +54,7 @@ services:
   beater:
     build:
       context: .
-      dockerfile: dockerfiles/stage/django/Dockerfile
+      dockerfile: dockerfiles/prod/django/Dockerfile
     command: celery -A core beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
       - ./core:/usr/src/app
