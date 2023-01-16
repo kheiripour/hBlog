@@ -7,14 +7,16 @@ services:
     restart: always
     expose: 
       - "6379"
-    command: redis-server --save 60 1 --loglevel warning    
+    command: redis-server --save 60 1 --loglevel warning  
+    env_file:
+      - envs/stage/redis/.env  
 
   db:
     image: postgres
     container_name: db
     volumes:
       - ./data/db:/var/lib/postgresql/data
-    environment:
+    env_file:
       - envs/stage/db/.env
     restart: always
       
@@ -50,6 +52,8 @@ services:
     depends_on: 
       - redis
       - backend
+    env_file:
+      - envs/stage/worker/.env
 
   beater:
     build:
@@ -61,6 +65,8 @@ services:
     depends_on: 
       - redis
       - backend
+    env_file:
+      - envs/stage/beater/.env
       
   nginx:
     build:
@@ -75,6 +81,8 @@ services:
     depends_on:
       - redis
       - backend
+    env_file:
+      - envs/stage/nginx/.env
 
 volumes:
   static_volume:
