@@ -4,7 +4,7 @@ from .models import Post
 
 
 class BlogSitemap(Sitemap):
-    changefreq = "weekly"
+    changefreq = "always"
     priority = 0.5
 
     def items(self):
