@@ -177,10 +177,11 @@ COMPRESS_ROOT = STATIC_ROOT
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Site configs
-if DEBUG == True:
-    SITE_ID = 2
-else:
-    SITE_ID = 5
+# if DEBUG == True:
+#     SITE_ID = 7
+# else:
+#     SITE_ID = 6
+SITE_ID = 6
 
 # robots
 ROBOTS_USE_SITEMAP = True
@@ -220,6 +221,7 @@ EMAIL_HOST_PASSWORD = "olsaonsafhfqcblq"
 
 # celery configs
 CELERY_BROKER_URL = "redis://redis:6379/1"
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # cache with redis configs
 CACHES = {
