@@ -43,9 +43,7 @@ services:
       - db
 
   worker:
-    build:
-      context: .
-      dockerfile: dockerfiles/stage/django/Dockerfile
+    build: .
     command: celery -A core worker --loglevel=info
     restart: always
     volumes:
@@ -58,9 +56,7 @@ services:
       - envs/stage/worker/.env
 
   beater:
-    build:
-      context: .
-      dockerfile: dockerfiles/stage/django/Dockerfile
+    build: .
     command: celery -A core beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     restart: always
     volumes:
